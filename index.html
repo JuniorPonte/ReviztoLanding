@@ -1,0 +1,911 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plataforma integrada de colaboración BIM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-primary: #0b0f14;
+    --bg-secondary: #0e1520;
+    --bg-card: #121a26;
+    --bg-card-hover: #162030;
+    --red-top: #7a0000;
+    --orange: #f97316;
+    --orange-dark: #e06010;
+    --orange-dim: rgba(249,115,22,0.1);
+    --orange-border: rgba(249,115,22,0.2);
+    --white: #ffffff;
+    --gray-light: #bec8d8;
+    --gray-mid: #7a8899;
+    --border-subtle: rgba(255,255,255,0.06);
+    --border-mid: rgba(255,255,255,0.09);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg-primary);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  .topbar { background: var(--red-top); height: 6px; width: 100%; }
+
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(11,15,20,0.96);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 0 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 62px;
+  }
+
+  .nav-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 1.55rem; letter-spacing: 0.06em;
+    color: var(--white); text-decoration: none; text-transform: uppercase;
+  }
+  .nav-logo span { color: var(--orange); }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+  .nav-links a {
+    color: var(--gray-mid); text-decoration: none;
+    font-size: 0.875rem; font-weight: 500; letter-spacing: 0.03em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-cta {
+    background: var(--orange) !important; color: #000 !important;
+    font-family: 'Barlow Condensed', sans-serif !important;
+    font-weight: 700 !important; font-size: 0.85rem !important;
+    letter-spacing: 0.08em !important; text-transform: uppercase !important;
+    padding: 0.42rem 1.1rem !important; border-radius: 5px !important;
+    transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--orange-dark) !important; }
+
+  section { padding: 96px 5%; }
+
+  .eyebrow {
+    display: inline-block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 0.7rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--orange);
+    background: var(--orange-dim); border: 1px solid var(--orange-border);
+    padding: 0.28rem 0.75rem; border-radius: 3px; margin-bottom: 1.3rem;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; line-height: 1.06; letter-spacing: -0.01em;
+  }
+  h1 { font-size: clamp(2.8rem, 5vw, 4.4rem); }
+  h2 { font-size: clamp(2rem, 3.5vw, 3rem); }
+  h3 { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.01em; }
+  p { color: var(--gray-light); }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.78rem 1.7rem; border-radius: 6px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 0.95rem; letter-spacing: 0.08em;
+    text-transform: uppercase; text-decoration: none;
+    cursor: pointer; border: none; transition: all 0.2s;
+  }
+  .btn-primary { background: var(--orange); color: #000; border: 2px solid var(--orange); }
+  .btn-primary:hover {
+    background: var(--orange-dark); border-color: var(--orange-dark);
+    transform: translateY(-2px); box-shadow: 0 8px 28px rgba(249,115,22,0.3);
+  }
+  .btn-secondary { background: transparent; color: var(--gray-light); border: 2px solid rgba(255,255,255,0.18); }
+  .btn-secondary:hover { border-color: rgba(255,255,255,0.4); color: var(--white); transform: translateY(-2px); }
+
+  /* Shared icon style */
+  .ico { display: block; width: 100%; height: 100%; stroke: var(--orange); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* HERO */
+  .hero {
+    min-height: calc(100vh - 68px);
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 5rem; align-items: center;
+    padding-top: 80px; padding-bottom: 80px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: -300px; right: -300px;
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(249,115,22,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-content { position: relative; z-index: 2; }
+  .hero h1 { margin-bottom: 1.3rem; }
+  .hero h1 span { color: var(--orange); }
+  .hero-sub { font-size: 1rem; color: var(--gray-light); max-width: 500px; margin-bottom: 2rem; line-height: 1.72; }
+
+  .stats-band {
+    width: min(920px, calc(100% + 20rem));
+    max-width: 100%;
+    margin: 0 0 2rem;
+    position: relative;
+    z-index: 3;
+  }
+  .stats-band-inner {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+    background: linear-gradient(135deg, rgba(12,19,32,0.96) 0%, rgba(11,15,20,0.98) 100%);
+    border: 1px solid rgba(249,115,22,0.16);
+    border-radius: 14px;
+    box-shadow: 0 24px 70px rgba(0,0,0,0.35);
+    overflow: hidden;
+  }
+  .trust-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.35rem;
+    min-height: 136px;
+    padding: 2rem 2.25rem;
+    position: relative;
+  }
+  .trust-stat:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 22%;
+    right: 0;
+    width: 1px;
+    height: 56%;
+    background: rgba(255,255,255,0.08);
+  }
+  .trust-stat strong {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(2.2rem, 4vw, 3.7rem);
+    line-height: 0.95;
+    color: var(--orange);
+    letter-spacing: -0.03em;
+  }
+  .trust-stat span {
+    font-size: 0.98rem;
+    color: #9ab0cc;
+    font-weight: 500;
+    line-height: 1.35;
+    max-width: 18ch;
+  }
+
+  .hero-btns { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+  .hero-visual { position: relative; z-index: 2; }
+
+  /* Mock screen */
+  .mock-screen {
+    background: var(--bg-card); border: 1px solid rgba(249,115,22,0.18);
+    border-radius: 12px; overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.7), 0 0 80px rgba(249,115,22,0.05);
+    aspect-ratio: 16/10; display: flex; flex-direction: column;
+  }
+  .mock-bar {
+    background: #080d14; border-bottom: 1px solid var(--border-subtle);
+    padding: 0.55rem 0.9rem; display: flex; align-items: center; gap: 0.45rem;
+  }
+  .mock-dot { width: 9px; height: 9px; border-radius: 50%; }
+  .mock-dot:nth-child(1) { background: #ff5f57; }
+  .mock-dot:nth-child(2) { background: #febc2e; }
+  .mock-dot:nth-child(3) { background: #28c840; }
+  .mock-body {
+    flex: 1;
+    min-height: 0;
+    background: linear-gradient(180deg, #09111a 0%, #070d14 100%);
+    padding: 0.65rem;
+  }
+  .mock-video-wrap {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #050a10;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .mock-video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    background: #050a10;
+  }
+
+  @keyframes shimmer { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+  /* PAIN */
+  .pain { background: var(--bg-secondary); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); }
+  .pain-inner { max-width: 940px; margin: 0 auto; text-align: center; }
+  .pain-inner h2 { margin-bottom: 0.9rem; }
+  .pain-inner > p { font-size: 0.97rem; max-width: 600px; margin: 0 auto 3.5rem; color: var(--gray-mid); }
+  .pain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; text-align: left; }
+  .pain-card {
+    background: var(--bg-card); border: 1px solid var(--border-mid);
+    border-top: 2px solid var(--orange); border-radius: 8px;
+    padding: 1.5rem 1.4rem 1.3rem; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .pain-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.45); }
+  .pain-icon-w { width: 36px; height: 36px; margin-bottom: 1rem; }
+  .pain-card h3 { font-size: 0.95rem; margin-bottom: 0.4rem; color: var(--white); }
+  .pain-card p { font-size: 0.84rem; color: var(--gray-mid); line-height: 1.55; }
+
+  /* PLATFORM */
+  .platform-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+  .platform-content h2 { margin-bottom: 1rem; }
+  .platform-content h2 span { color: var(--orange); }
+  .platform-content p { margin-bottom: 1rem; font-size: 0.95rem; }
+  .connect-list { margin-top: 1.8rem; display: flex; flex-direction: column; gap: 0.6rem; }
+  .connect-item {
+    display: flex; align-items: center; gap: 0.7rem;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 600;
+    font-size: 0.88rem; letter-spacing: 0.04em; color: var(--gray-light); text-transform: uppercase;
+  }
+  .connect-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--orange); flex-shrink: 0; }
+
+  .feature-rows { display: flex; flex-direction: column; gap: 0.75rem; }
+  .feature-row {
+    display: flex; align-items: flex-start; gap: 1rem;
+    background: var(--bg-card); border: 1px solid var(--border-mid);
+    border-radius: 9px; padding: 1.1rem 1.3rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .feature-row:hover { border-color: var(--orange-border); background: var(--bg-card-hover); }
+  .feat-ico { width: 34px; height: 34px; flex-shrink: 0; margin-top: 2px; }
+  .feature-row h4 {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+    font-size: 0.93rem; letter-spacing: 0.03em; margin-bottom: 0.18rem; color: var(--white);
+  }
+  .feature-row p { font-size: 0.82rem; color: var(--gray-mid); margin: 0; line-height: 1.5; }
+
+  /* PILLARS */
+  .pillars { background: var(--bg-secondary); }
+  .pillars-header { text-align: center; margin-bottom: 3.5rem; }
+  .pillars-header h2 { margin-bottom: 0.7rem; }
+  .pillars-header h2 span { color: var(--orange); }
+  .pillars-header p { max-width: 520px; margin: 0 auto; font-size: 0.93rem; color: var(--gray-mid); }
+  .pillars-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.2rem; }
+  .pillar-card {
+    background: var(--bg-card); border: 1px solid var(--border-mid);
+    border-radius: 12px; padding: 2rem 1.8rem;
+    position: relative; overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+  }
+  .pillar-card:hover { transform: translateY(-5px); box-shadow: 0 24px 64px rgba(0,0,0,0.5); border-color: var(--orange-border); }
+  .pillar-number {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 6rem;
+    color: rgba(249,115,22,0.05); position: absolute; top: -1rem; right: 0.8rem;
+    line-height: 1; user-select: none;
+  }
+  .pillar-ico { width: 38px; height: 38px; margin-bottom: 1.2rem; }
+  .pillar-card h3 { margin-bottom: 0.6rem; font-size: 1.1rem; color: var(--white); }
+  .pillar-card p { font-size: 0.87rem; color: var(--gray-mid); line-height: 1.6; }
+
+  /* BENEFITS */
+  .benefits { display: grid; grid-template-columns: 1fr 1fr; }
+  .benefit-block { padding: 80px 5%; }
+  .benefit-block.alt { background: var(--bg-secondary); border-left: 1px solid var(--border-subtle); }
+  .benefit-block h2 { margin-bottom: 0.6rem; }
+  .benefit-block h2 span { color: var(--orange); }
+  .benefit-block > p { margin-bottom: 2.2rem; font-size: 0.9rem; color: var(--gray-mid); max-width: 400px; }
+  .benefit-list { display: flex; flex-direction: column; gap: 0; }
+  .benefit-item {
+    display: flex; align-items: flex-start; gap: 0.9rem;
+    padding: 1rem 0; border-bottom: 1px solid var(--border-subtle);
+  }
+  .benefit-item:last-child { border-bottom: none; }
+  .ben-ico { width: 28px; height: 28px; flex-shrink: 0; margin-top: 2px; opacity: 0.75; }
+  .benefit-item-text strong {
+    display: block; font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 0.9rem; letter-spacing: 0.02em; color: var(--white); margin-bottom: 0.12rem;
+  }
+  .benefit-item-text span { font-size: 0.82rem; color: var(--gray-mid); line-height: 1.45; }
+
+  /* ROLES */
+  .roles { background: var(--bg-secondary); }
+  .roles-header { text-align: center; margin-bottom: 3rem; }
+  .roles-header h2 span { color: var(--orange); }
+  .roles-header p { max-width: 500px; margin: 0.6rem auto 0; font-size: 0.92rem; color: var(--gray-mid); }
+  .roles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 1rem; }
+  .role-card {
+    background: var(--bg-card); border: 1px solid var(--border-mid);
+    border-radius: 10px; padding: 1.8rem 1.4rem; text-align: center;
+    transition: all 0.22s;
+  }
+  .role-card:hover { border-color: var(--orange-border); background: var(--bg-card-hover); transform: translateY(-4px); }
+  .role-ico { width: 38px; height: 38px; margin: 0 auto 1rem; }
+  .role-card h3 { font-size: 0.95rem; margin-bottom: 0.4rem; }
+  .role-card p { font-size: 0.82rem; color: var(--gray-mid); line-height: 1.5; }
+
+  /* SECTORS */
+  .sectors-header { text-align: center; margin-bottom: 2.5rem; }
+  .sectors-header h2 span { color: var(--orange); }
+  .sectors-header p { font-size: 0.9rem; color: var(--gray-mid); margin-top: 0.5rem; }
+  .sectors-row { display: flex; gap: 0.7rem; flex-wrap: wrap; justify-content: center; }
+  .sector-pill {
+    display: flex; align-items: center; gap: 0.5rem;
+    background: var(--bg-card); border: 1px solid var(--border-mid);
+    border-radius: 999px; padding: 0.5rem 1.2rem;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 600;
+    font-size: 0.9rem; letter-spacing: 0.04em; color: var(--gray-light);
+    transition: all 0.2s;
+  }
+  .sector-pill:hover { border-color: var(--orange-border); color: var(--white); background: var(--bg-card-hover); }
+  .sect-ico { width: 14px; height: 14px; stroke: var(--orange); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; opacity: 0.8; }
+
+  /* WHY */
+  .why { background: var(--bg-secondary); }
+  .why-header { text-align: center; margin-bottom: 3rem; }
+  .why-header h2 span { color: var(--orange); }
+  .why-header p { max-width: 540px; margin: 0.6rem auto 0; font-size: 0.92rem; color: var(--gray-mid); }
+  .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(275px, 1fr)); gap: 1rem; }
+  .why-card {
+    background: var(--bg-card); border: 1px solid var(--border-mid);
+    border-radius: 10px; padding: 1.4rem 1.4rem;
+    display: flex; gap: 1rem; align-items: flex-start;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .why-card:hover { border-color: var(--orange-border); background: var(--bg-card-hover); }
+  .why-ico { width: 34px; height: 34px; flex-shrink: 0; margin-top: 2px; }
+  .why-card h3 { font-size: 0.93rem; margin-bottom: 0.3rem; color: var(--white); }
+  .why-card p { font-size: 0.83rem; color: var(--gray-mid); line-height: 1.55; }
+
+  /* CTA FINAL */
+  .cta-final {
+    background: linear-gradient(135deg, #0c1320 0%, #101a28 60%, #0b1018 100%);
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .cta-final::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, rgba(249,115,22,0.08) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .cta-final-inner { position: relative; z-index: 2; }
+  .cta-final h2 { max-width: 680px; margin: 0 auto 1rem; }
+  .cta-final h2 span { color: var(--orange); }
+  .cta-final p { max-width: 480px; margin: 0 auto 2.5rem; font-size: 0.95rem; color: var(--gray-mid); }
+  .cta-btns { display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; }
+
+  /* FAQ */
+  .faq-inner { max-width: 740px; margin: 0 auto; }
+  .faq-header { text-align: center; margin-bottom: 3rem; }
+  .faq-header h2 span { color: var(--orange); }
+  .faq-item { border-bottom: 1px solid var(--border-subtle); }
+  .faq-question {
+    width: 100%; background: none; border: none; color: var(--white);
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.05rem;
+    letter-spacing: 0.02em; text-align: left; padding: 1.3rem 0;
+    cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    gap: 1rem; transition: color 0.2s;
+  }
+  .faq-question:hover { color: var(--orange); }
+  .faq-arrow { color: var(--orange); transition: transform 0.25s; flex-shrink: 0; opacity: 0.65; }
+  .faq-arrow svg { display: block; width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .faq-item.open .faq-arrow { transform: rotate(180deg); }
+  .faq-answer { overflow: hidden; max-height: 0; transition: max-height 0.35s ease; }
+  .faq-answer p { font-size: 0.9rem; color: var(--gray-mid); padding-bottom: 1.3rem; line-height: 1.7; }
+  .faq-item.open .faq-answer { max-height: 300px; }
+
+  footer {
+    background: #070b10; border-top: 1px solid var(--border-subtle);
+    padding: 2rem 5%; display: flex; justify-content: space-between;
+    align-items: center; flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-logo {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+    font-size: 1.2rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--white);
+  }
+  .footer-logo span { color: var(--orange); }
+  footer p { font-size: 0.78rem; color: var(--gray-mid); }
+
+  .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 960px) {
+    .hero { grid-template-columns: 1fr; gap: 3rem; min-height: auto; }
+    .hero-visual { order: -1; }
+    .stats-band { width: 100%; margin-bottom: 1.75rem; }
+    .stats-band-inner { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .platform-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .benefits { grid-template-columns: 1fr; }
+    .benefit-block.alt { border-left: none; border-top: 1px solid var(--border-subtle); }
+    nav .nav-links li:not(:last-child) { display: none; }
+  }
+
+  @media (max-width: 640px) {
+    .stats-band-inner { grid-template-columns: 1fr; }
+    .trust-stat { min-height: auto; padding: 1.5rem 1.4rem; }
+    .trust-stat:not(:last-child)::after {
+      top: auto;
+      right: 1.4rem;
+      bottom: 0;
+      left: 1.4rem;
+      width: auto;
+      height: 1px;
+    }
+    .trust-stat span { max-width: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"></div>
+
+<nav>
+  <a class="nav-logo" href="#">REVIZTO<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#plataforma">Plataforma</a></li>
+    <li><a href="#pilares">Capacidades</a></li>
+    <li><a href="#roles">Para quién</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#cta" class="nav-cta">Agenda una demo</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content fade-in">
+    <div class="eyebrow">Plataforma integrada de colaboración BIM</div>
+    <h1>Revizto — Toda tu coordinación BIM, <span>conectada en un solo lugar</span></h1>
+    <p class="hero-sub">Revizto centraliza la colaboración BIM en un solo entorno accesible desde oficina y obra, ayudando a reducir retrabajos, detectar conflictos antes y mantener a todos alineados sobre la misma información.</p>
+    <div class="stats-band">
+      <div class="stats-band-inner">
+        <div class="trust-stat">
+          <strong>3,000+</strong>
+          <span>Empresas en todo el mundo</span>
+        </div>
+        <div class="trust-stat">
+          <strong>20/25</strong>
+          <span>Top ENR firms usan Revizto</span>
+        </div>
+        <div class="trust-stat">
+          <strong>100+</strong>
+          <span>Integraciones disponibles</span>
+        </div>
+        <div class="trust-stat">
+          <strong>Día 1</strong>
+          <span>Despliegue y adopción inmediata</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-btns">
+      <a href="#cta" class="btn btn-primary">Agenda una demo</a>
+      <a href="#plataforma" class="btn btn-secondary">Ver cómo funciona</a>
+    </div>
+  </div>
+  <div class="hero-visual fade-in" style="transition-delay:0.25s">
+    <div class="mock-screen">
+      <div class="mock-bar">
+        <div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-dot"></div>
+      </div>
+      <div class="mock-body">
+        <div class="mock-video-wrap">
+          <video
+            class="mock-video"
+            src="https://cdn.prod.website-files.com/68dfb2221c50b9fb5b595fd7%2F69458c5c3ab42957a112bbdc_Web_Product_v03_blur_compressed_mp4.mp4"
+            autoplay
+            muted
+            loop
+            playsinline
+          ></video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAIN -->
+<section class="pain">
+  <div class="pain-inner">
+    <div class="eyebrow">El problema</div>
+    <h2>La coordinación fragmentada tiene un costo real</h2>
+    <p>La información existe, pero no está donde se necesita. Cuando modelos, planos, incidencias y decisiones viven en herramientas distintas, cada disciplina trabaja con su propia versión de la realidad.</p>
+    <div class="pain-grid">
+      <div class="pain-card fade-in">
+        <div class="pain-icon-w">
+          <svg class="ico" viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
+        </div>
+        <h3>Modelos sin conexión a planos</h3>
+        <p>Cada disciplina trabaja sobre versiones distintas, forzando reconciliaciones manuales antes de cada reunión de coordinación.</p>
+      </div>
+      <div class="pain-card fade-in" style="transition-delay:0.08s">
+        <div class="pain-icon-w">
+          <svg class="ico" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/><line x1="9" y1="10" x2="15" y2="10"/></svg>
+        </div>
+        <h3>Incidencias sin trazabilidad</h3>
+        <p>Los issues se registran en chats, correos y hojas de cálculo. Sin responsable claro, sin estado, sin historial.</p>
+      </div>
+      <div class="pain-card fade-in" style="transition-delay:0.16s">
+        <div class="pain-icon-w">
+          <svg class="ico" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <h3>Conflictos detectados en obra</h3>
+        <p>Los clashes que debieron resolverse en diseño aparecen durante la construcción, cuando el costo de corrección es máximo.</p>
+      </div>
+      <div class="pain-card fade-in" style="transition-delay:0.24s">
+        <div class="pain-icon-w">
+          <svg class="ico" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/><path d="M9 7h6M9 11h4"/></svg>
+        </div>
+        <h3>Campo desconectado de oficina</h3>
+        <p>Los equipos en terreno toman decisiones con información desactualizada porque el acceso desde obra es lento o inexistente.</p>
+      </div>
+      <div class="pain-card fade-in" style="transition-delay:0.32s">
+        <div class="pain-icon-w">
+          <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <h3>Reuniones que reemplazan sistemas</h3>
+        <p>Sin un repositorio centralizado, las reuniones de coordinación se convierten en el único mecanismo real de alineación.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLATAFORMA -->
+<section id="plataforma">
+  <div class="platform-grid">
+    <div class="platform-content fade-in">
+      <div class="eyebrow">Cómo funciona Revizto</div>
+      <h2>Un entorno compartido para todo lo que hoy está <span>disperso</span></h2>
+      <p>Revizto no reemplaza tus herramientas de modelado. Actúa como la capa de coordinación que conecta modelos, planos, incidencias y equipos en un único entorno de trabajo.</p>
+      <p>Desde ahí, diseñadores, ingenieros y constructores operan sobre la misma fuente de información, con contexto 2D y 3D siempre disponible, desde cualquier dispositivo.</p>
+      <div class="connect-list">
+        <div class="connect-item"><div class="connect-dot"></div>Modelos federados de múltiples disciplinas</div>
+        <div class="connect-item"><div class="connect-dot"></div>Planos 2D sincronizados con el modelo 3D</div>
+        <div class="connect-item"><div class="connect-dot"></div>Incidencias geolocalizadas en coordenadas reales</div>
+        <div class="connect-item"><div class="connect-dot"></div>Clashes con seguimiento y resolución colaborativa</div>
+        <div class="connect-item"><div class="connect-dot"></div>Acceso desde desktop, tablet y dispositivos móviles</div>
+      </div>
+    </div>
+    <div class="feature-rows fade-in" style="transition-delay:0.15s">
+      <div class="feature-row">
+        <div class="feat-ico">
+          <svg class="ico" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        </div>
+        <div>
+          <h4>Navegación 2D / 3D integrada</h4>
+          <p>Alterna entre planos y modelo sin salir del entorno de coordinación. El contexto espacial siempre está presente.</p>
+        </div>
+      </div>
+      <div class="feature-row">
+        <div class="feat-ico">
+          <svg class="ico" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <div>
+          <h4>Issues anclados al modelo</h4>
+          <p>Cada incidencia lleva coordenadas, disciplina, responsable y estado. El historial queda registrado automáticamente.</p>
+        </div>
+      </div>
+      <div class="feature-row">
+        <div class="feat-ico">
+          <svg class="ico" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <div>
+          <h4>Clash detection colaborativa</h4>
+          <p>Conflictos identificados, clasificados y asignados dentro del entorno. Sin exportar, sin cambiar de herramienta.</p>
+        </div>
+      </div>
+      <div class="feature-row">
+        <div class="feat-ico">
+          <svg class="ico" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/><path d="M9 7h6"/></svg>
+        </div>
+        <div>
+          <h4>Acceso móvil con soporte offline</h4>
+          <p>iOS y Android. Los equipos en campo acceden a modelos e issues sin conexión; los datos se sincronizan al recuperar señal.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PILLARS -->
+<section class="pillars" id="pilares">
+  <div class="pillars-header fade-in">
+    <div class="eyebrow">Cómo organiza Revizto la solución</div>
+      <h2>Cuatro frentes donde Revizto <span>estructura la coordinación</span></h2>
+    <p>No es un conjunto de módulos aislados. Cada frente está diseñado para trabajar en conjunto y eliminar los puntos de ruptura más comunes en proyectos BIM.</p>
+  </div>
+  <div class="pillars-grid">
+    <div class="pillar-card fade-in">
+      <div class="pillar-number">01</div>
+      <div class="pillar-ico">
+        <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><path d="M13 8l3 3-3 3"/></svg>
+      </div>
+      <h3>Modelos y planos en contexto</h3>
+      <p>Planos 2D y modelos 3D en un entorno unificado. Cualquier issue se ancla a su ubicación exacta, ya sea en planta o en el modelo federado. El contexto nunca se pierde.</p>
+    </div>
+    <div class="pillar-card fade-in" style="transition-delay:0.1s">
+      <div class="pillar-number">02</div>
+      <div class="pillar-ico">
+        <svg class="ico" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      </div>
+      <h3>Incidencias con trazabilidad</h3>
+      <p>Cada issue queda asignado, fechado y vinculado al punto exacto del modelo. Sin email chains. Sin pérdida de historial. El estado de cada incidencia es visible para todo el equipo.</p>
+    </div>
+    <div class="pillar-card fade-in" style="transition-delay:0.2s">
+      <div class="pillar-number">03</div>
+      <div class="pillar-ico">
+        <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <h3>Coordinación y clash automation</h3>
+      <p>Los conflictos entre disciplinas se detectan, clasifican y resuelven dentro de Revizto, con seguimiento en tiempo real y asignación directa a los responsables de cada disciplina.</p>
+    </div>
+    <div class="pillar-card fade-in" style="transition-delay:0.3s">
+      <div class="pillar-number">04</div>
+      <div class="pillar-ico">
+        <svg class="ico" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><rect x="2" y="2" width="20" height="20" rx="2" style="fill:none"/></svg>
+      </div>
+      <h3>Datos conectados para decidir</h3>
+      <p>Dashboards de avance, métricas de coordinación y estado de issues disponibles en tiempo real. Más de 100 integraciones con ACC, Procore, SharePoint y otros sistemas.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section style="padding:0;">
+  <div class="benefits">
+    <div class="benefit-block fade-in">
+      <div class="eyebrow">Para el proyecto</div>
+      <h2>Impacto directo en <span>cada proyecto</span></h2>
+      <p>Resultados medibles en tiempo ahorrado, errores evitados y decisiones tomadas con información confiable.</p>
+      <div class="benefit-list">
+        <div class="benefit-item">
+          <div class="ben-ico"><svg class="ico" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+          <div class="benefit-item-text">
+            <strong>Menos retrabajo en obra</strong>
+            <span>Los conflictos se resuelven antes de que lleguen a construcción, reduciendo órdenes de cambio no planificadas.</span>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="ben-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+          <div class="benefit-item-text">
+            <strong>Coordinación interdisciplinaria fluida</strong>
+            <span>Arquitectura, estructuras e instalaciones trabajan sobre el mismo modelo federado sin fricciones de versión.</span>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="ben-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+          <div class="benefit-item-text">
+            <strong>Decisiones documentadas y trazables</strong>
+            <span>Cada resolución de issue queda registrada con fecha, responsable y contexto. Sin ambigüedades ni acuerdos informales.</span>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="ben-ico"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div class="benefit-item-text">
+            <strong>Visibilidad del avance sin reportes manuales</strong>
+            <span>Estado de clashes, issues abiertos y pendientes críticos disponibles en tiempo real para todo el equipo.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="benefit-block alt fade-in" style="transition-delay:0.15s">
+      <div class="eyebrow">Para la organización</div>
+      <h2>Valor que escala con tu <span>operación</span></h2>
+      <p>Revizto no es solo una herramienta de proyecto. Es la base sobre la que las organizaciones AECO estandarizan y escalan su práctica BIM.</p>
+      <div class="benefit-list">
+        <div class="benefit-item">
+          <div class="ben-ico"><svg class="ico" viewBox="0 0 24 24"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg></div>
+          <div class="benefit-item-text">
+            <strong>Estándar de coordinación entre proyectos</strong>
+            <span>Un proceso reproducible y auditado que no depende de individuos ni de herramientas ad hoc para funcionar.</span>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="ben-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div class="benefit-item-text">
+            <strong>Control y seguridad a nivel enterprise</strong>
+            <span>Permisos granulares por proyecto y disciplina, control de acceso y cumplimiento de estándares corporativos de datos.</span>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="ben-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+          <div class="benefit-item-text">
+            <strong>Adopción sin fricción a escala</strong>
+            <span>La curva de aprendizaje baja permite que perfiles técnicos y no técnicos adopten la plataforma desde el primer proyecto.</span>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="ben-ico"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg></div>
+          <div class="benefit-item-text">
+            <strong>Integrado al ecosistema existente</strong>
+            <span>Conecta con ACC, Procore, SharePoint y más de 100 sistemas. Revizto se incorpora a tu stack sin reemplazarlo.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROLES -->
+<section class="roles" id="roles">
+  <div class="roles-header fade-in">
+    <div class="eyebrow">Para quién</div>
+    <h2>Diseñado para cada <span>perfil del proyecto</span></h2>
+    <p>Desde el BIM Manager hasta el supervisor de obra. Revizto se adapta al nivel de detalle y acceso que necesita cada rol.</p>
+  </div>
+  <div class="roles-grid">
+    <div class="role-card fade-in">
+      <div class="role-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></div>
+      <h3>Arquitectos</h3>
+      <p>Comunica cambios de diseño con contexto visual directo sobre el modelo, sin depender de correos.</p>
+    </div>
+    <div class="role-card fade-in" style="transition-delay:0.08s">
+      <div class="role-ico"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M21 12h-2M5 12H3M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M12 19v2M12 3v2"/></svg></div>
+      <h3>Ingenieros BIM</h3>
+      <p>Gestiona detección de clashes y coordinación interdisciplinaria directamente en el entorno de colaboración.</p>
+    </div>
+    <div class="role-card fade-in" style="transition-delay:0.16s">
+      <div class="role-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+      <h3>Contratistas generales</h3>
+      <p>Monitorea el estado de issues y clashes por disciplina con visibilidad completa del frente de coordinación.</p>
+    </div>
+    <div class="role-card fade-in" style="transition-delay:0.24s">
+      <div class="role-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div>
+      <h3>Subcontratistas</h3>
+      <p>Accede a planos e issues desde obra en dispositivos móviles, con soporte offline para trabajo en campo.</p>
+    </div>
+    <div class="role-card fade-in" style="transition-delay:0.32s">
+      <div class="role-ico"><svg class="ico" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+      <h3>Project Managers / VDC</h3>
+      <p>Toma decisiones con métricas reales de coordinación, sin depender de reportes manuales ni reuniones de alineación.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTORS -->
+<section>
+  <div class="sectors-header fade-in">
+    <div class="eyebrow">Sectores</div>
+    <h2>Válido para proyectos de <span>alta complejidad</span></h2>
+    <p>Revizto opera en los entornos más exigentes del sector AECO, desde edificación hasta infraestructura crítica.</p>
+  </div>
+  <div class="sectors-row fade-in">
+    <div class="sector-pill"><svg class="sect-ico" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="15" rx="1"/><path d="M2 12h20"/></svg>Edificación</div>
+    <div class="sector-pill"><svg class="sect-ico" viewBox="0 0 24 24"><path d="M2 17l10-10 10 10"/><path d="M5 14l7-7 7 7"/></svg>Infraestructura</div>
+    <div class="sector-pill"><svg class="sect-ico" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>Aeropuertos</div>
+    <div class="sector-pill"><svg class="sect-ico" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Data Centers</div>
+    <div class="sector-pill"><svg class="sect-ico" viewBox="0 0 24 24"><path d="M2 20h20M5 20V8l7-5 7 5v12"/></svg>Industrial</div>
+    <div class="sector-pill"><svg class="sect-ico" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Minería</div>
+    <div class="sector-pill"><svg class="sect-ico" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Salud</div>
+    <div class="sector-pill"><svg class="sect-ico" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Campus</div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="why">
+  <div class="why-header fade-in">
+    <div class="eyebrow">Por qué Revizto</div>
+    <h2>No es otra herramienta BIM. Es una <span>ventaja operativa</span></h2>
+    <p>La diferencia no está en las funciones. Está en cómo se adopta, cómo se integra al flujo existente y cómo escala cuando el proyecto crece.</p>
+  </div>
+  <div class="why-grid">
+    <div class="why-card fade-in">
+      <div class="why-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      <div>
+        <h3>Operativo desde el primer día</h3>
+        <p>Sin semanas de implementación. Los equipos acceden, navegan y registran incidencias desde la primera sesión de coordinación.</p>
+      </div>
+    </div>
+    <div class="why-card fade-in" style="transition-delay:0.08s">
+      <div class="why-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+      <div>
+        <h3>Adoptado por técnicos y no técnicos</h3>
+        <p>La interfaz no exige formación avanzada en BIM. Un BIM Manager y un inspector de obra pueden usar la misma plataforma con naturalidad.</p>
+      </div>
+    </div>
+    <div class="why-card fade-in" style="transition-delay:0.16s">
+      <div class="why-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg></div>
+      <div>
+        <h3>Oficina y obra en el mismo flujo</h3>
+        <p>No hay dos interfaces distintas. El ingeniero en oficina y el supervisor en terreno trabajan sobre la misma información, en tiempo real.</p>
+      </div>
+    </div>
+    <div class="why-card fade-in" style="transition-delay:0.24s">
+      <div class="why-ico"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg></div>
+      <div>
+        <h3>Conectado al ecosistema actual</h3>
+        <p>Más de 100 integraciones con ACC, Procore, SharePoint y otros. Revizto se incorpora a tu stack sin reemplazarlo.</p>
+      </div>
+    </div>
+    <div class="why-card fade-in" style="transition-delay:0.32s">
+      <div class="why-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+      <div>
+        <h3>Probado en proyectos de alta complejidad</h3>
+        <p>20 de las 25 firmas top del ranking ENR lo usan activamente. La plataforma no tiene límite de escala ni de disciplinas.</p>
+      </div>
+    </div>
+    <div class="why-card fade-in" style="transition-delay:0.4s">
+      <div class="why-ico"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+      <div>
+        <h3>Seguridad y control a nivel enterprise</h3>
+        <p>Gestión de permisos por proyecto y disciplina, control de acceso granular y cumplimiento de requisitos corporativos de datos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final" id="cta">
+  <div class="cta-final-inner fade-in">
+    <div class="eyebrow">¿Listo para coordinar mejor?</div>
+    <h2>Reduce el retrabajo, anticipa conflictos y <span>toma decisiones con información real</span></h2>
+    <p>Agenda una demo de 30 minutos. Te mostramos cómo Revizto se adapta a tu tipo de proyecto y a tu stack actual.</p>
+    <div class="cta-btns">
+      <a href="#" class="btn btn-primary">Agenda una demo</a>
+      <a href="#" class="btn btn-secondary">Solicita una evaluación de tu proyecto</a>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="faq-inner">
+    <div class="faq-header fade-in">
+      <div class="eyebrow">Preguntas frecuentes</div>
+      <h2>Lo que los equipos <span>suelen preguntar</span></h2>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">¿Qué es Revizto y para qué sirve? <span class="faq-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+      <div class="faq-answer"><p>Revizto es una plataforma de colaboración BIM que centraliza modelos 3D, planos 2D, gestión de issues y coordinación de clashes en un único entorno. Está pensada para que todos los actores del proyecto, desde diseño hasta obra, trabajen sobre la misma información sin cambiar de herramienta.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">¿Revizto reemplaza Revit o Navisworks? <span class="faq-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+      <div class="faq-answer"><p>No. Revizto no es una herramienta de modelado. Complementa tu stack actual: importa modelos desde Revit, Navisworks, IFC y otras fuentes, y actúa como el entorno de coordinación y colaboración sobre esos modelos. Tu flujo de trabajo de modelado no cambia.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">¿En qué se diferencia de otras plataformas BIM del mercado? <span class="faq-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+      <div class="faq-answer"><p>A diferencia de soluciones centradas solo en gestión documental o solo en clash detection, Revizto unifica en un mismo entorno la navegación de modelos, la trazabilidad de issues y la coordinación entre disciplinas. Eso elimina la necesidad de sincronizar información entre múltiples herramientas.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">¿Funciona tanto en fase de diseño como en construcción? <span class="faq-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+      <div class="faq-answer"><p>Sí. En diseño e ingeniería, centraliza la coordinación de modelos y la detección de clashes. En construcción, conecta a los equipos de campo con la información actualizada del proyecto a través de dispositivos móviles con soporte offline completo.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">¿Se puede usar desde dispositivos móviles y sin conexión? <span class="faq-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+      <div class="faq-answer"><p>Sí. Revizto tiene aplicaciones nativas para iOS y Android con soporte offline completo. Los equipos en terreno pueden acceder a modelos, planos e issues sin internet, y los cambios se sincronizan automáticamente al recuperar señal.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">¿Se integra con ACC, Procore, SharePoint u otros sistemas? <span class="faq-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+      <div class="faq-answer"><p>Sí. Revizto cuenta con más de 100 integraciones nativas, incluyendo Autodesk Construction Cloud (ACC), Procore, SharePoint y otros sistemas de gestión de construcción y documentación. También dispone de API para integraciones a medida.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">¿Cuánto tiempo toma implementarlo en una organización? <span class="faq-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+      <div class="faq-answer"><p>La implementación es significativamente más rápida que la mayoría de plataformas enterprise. Los equipos pueden estar operativos desde el primer proyecto, sin consultoría de meses. El equipo de Revizto acompaña el onboarding y la configuración inicial.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">REVIZTO<span>.</span></div>
+  <p>© 2025 Revizto. Todos los derechos reservados.</p>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.parentElement;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+</script>
+</body>
+</html>
+
