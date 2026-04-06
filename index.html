@@ -184,7 +184,21 @@
     opacity: 0.7;
     pointer-events: none;
   }
-  .hero h1 { margin-bottom: 1.3rem; }
+  .hero-brand {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1.3rem;
+  }
+  .hero-logo {
+    display: block;
+    width: min(100%, 320px);
+    height: auto;
+  }
+  .hero-title {
+    max-width: 18ch;
+    font-size: clamp(2.4rem, 4.2vw, 3.9rem);
+  }
+  .hero h1 { margin: 0; }
   .hero h1 span { color: var(--orange); }
   .hero-sub { font-size: 1rem; color: var(--gray-light); max-width: 560px; margin-bottom: 2rem; line-height: 1.72; }
 
@@ -273,7 +287,7 @@
     background: var(--bg-card); border: 1px solid rgba(249,115,22,0.18);
     border-radius: 12px; overflow: hidden;
     box-shadow: 0 40px 100px rgba(0,0,0,0.7), 0 0 80px rgba(249,115,22,0.05);
-    aspect-ratio: 16/9; display: flex; flex-direction: column;
+    aspect-ratio: 4/3; display: flex; flex-direction: column;
     position: relative;
   }
   .mock-screen::after {
@@ -327,35 +341,54 @@
   .pain-copy { max-width: 780px; margin: 0 auto 3.75rem; text-align: center; }
   .pain-inner h2 { margin-bottom: 0.9rem; }
   .pain-copy > p { font-size: 1rem; max-width: 640px; margin: 0 auto; color: var(--gray-mid); }
-  .pain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.1rem; text-align: left; }
-  .pain-card {
-    background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0)), var(--bg-card);
-    border: 1px solid var(--border-mid);
-    border-top: 2px solid var(--orange);
-    border-radius: 14px;
-    padding: 1.5rem 1.4rem 1.3rem;
-    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-    position: relative;
-    overflow: hidden;
+  .pain-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.12fr) minmax(320px, 0.88fr);
+    gap: clamp(2rem, 3vw, 3rem);
+    align-items: stretch;
   }
-  .pain-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at top right, rgba(249,115,22,0.12), transparent 36%);
-    opacity: 0;
-    transition: opacity 0.25s ease;
-    pointer-events: none;
+  .pain-visual {
+    align-self: stretch;
+    display: flex;
   }
-  .pain-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 20px 54px rgba(0,0,0,0.45);
-    border-color: rgba(249,115,22,0.24);
+  .pain-visual img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    height: auto;
+    min-height: 0;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 12px;
+    display: block;
   }
-  .pain-card:hover::before { opacity: 1; }
-  .pain-icon-w { width: 36px; height: 36px; margin-bottom: 1rem; }
-  .pain-card h3 { font-size: 0.95rem; margin-bottom: 0.4rem; color: var(--white); }
-  .pain-card p { font-size: 0.84rem; color: var(--gray-mid); line-height: 1.55; }
+  .pain-points {
+    display: grid;
+    gap: 1rem;
+    align-content: center;
+  }
+  .pain-point {
+    padding: 0.95rem 0 0.95rem 1.1rem;
+    border-left: 3px solid var(--orange);
+    background: transparent;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .pain-point:hover {
+    background: rgba(255,255,255,0.02);
+    border-left-color: #ff9a4d;
+    box-shadow: inset 0 0 0 1px rgba(249,115,22,0.08);
+    transform: translateX(4px);
+  }
+  .pain-point h3 {
+    font-size: 1.32rem;
+    margin: 0 0 0.38rem;
+    color: var(--white);
+  }
+  .pain-point p {
+    margin: 0;
+    color: var(--gray-mid);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
 
   /* PLATFORM */
   .platform-grid { display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); gap: clamp(2.5rem, 4vw, 4.5rem); align-items: center; }
@@ -542,60 +575,98 @@
 
   /* BENEFITS */
   .benefits-shell { width: min(100%, var(--shell)); margin: 0 auto; }
-  .benefits { display: grid; grid-template-columns: 1fr 1fr; border-left: 1px solid var(--border-subtle); border-right: 1px solid var(--border-subtle); }
-  .benefit-block {
-    padding: 80px clamp(28px, 3vw, 42px);
-    position: relative;
-    overflow: hidden;
+  .benefits {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2.5rem, 4vw, 4.5rem);
+    align-items: start;
   }
-  .benefit-block::before {
-    content: '';
-    position: absolute;
-    inset: 0 auto auto 0;
-    width: 120px;
-    height: 120px;
-    background: radial-gradient(circle, rgba(249,115,22,0.12), transparent 68%);
-    pointer-events: none;
+  .benefit-block {
+    padding: 88px 0;
+    position: relative;
+    overflow: visible;
   }
   .benefit-block.alt {
-    background: var(--bg-secondary);
-    border-left: 1px solid var(--border-subtle);
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0)),
+      linear-gradient(135deg, rgba(249,115,22,0.05), transparent 45%),
+      #1a2332;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 24px;
+    padding: clamp(2.35rem, 3vw, 3.25rem);
+    box-shadow: 0 24px 64px rgba(0,0,0,0.3);
   }
-  .benefit-block h2 { margin-bottom: 0.6rem; }
-  .benefit-block h2 span { color: var(--orange); }
-  .benefit-block > p { margin-bottom: 2.2rem; font-size: 0.9rem; color: var(--gray-mid); max-width: 400px; }
-  .benefit-list { display: flex; flex-direction: column; gap: 0; }
+  .benefit-block h2 {
+    margin-bottom: 0.7rem;
+    font-size: clamp(2.4rem, 3.6vw, 3.6rem);
+    color: #f8fafc;
+    max-width: 13ch;
+  }
+  .benefit-block > p {
+    margin-bottom: 2.55rem;
+    font-size: 0.98rem;
+    color: var(--gray-light);
+    max-width: 42ch;
+    line-height: 1.6;
+  }
+  .benefit-list { display: flex; flex-direction: column; gap: 0.7rem; }
   .benefit-item {
-    display: flex; align-items: flex-start; gap: 0.9rem;
-    padding: 1rem 0;
+    display: flex; align-items: flex-start; gap: 1rem;
+    padding: 1.05rem 0;
     border-bottom: 1px solid var(--border-subtle);
-    transition: transform 0.2s ease, border-color 0.2s ease;
+    transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
   }
   .benefit-item:hover {
     transform: translateX(4px);
     border-color: rgba(249,115,22,0.18);
+    background: rgba(255,255,255,0.015);
   }
   .benefit-item:last-child { border-bottom: none; }
-  .ben-ico { width: 28px; height: 28px; flex-shrink: 0; margin-top: 2px; opacity: 0.75; }
-  .benefit-item-text strong {
-    display: block; font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700; font-size: 0.9rem; letter-spacing: 0.02em; color: var(--white); margin-bottom: 0.12rem;
+  .ben-ico {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    margin-top: 0.42rem;
+    color: #ea580c;
+    opacity: 1;
   }
-  .benefit-item-text span { font-size: 0.82rem; color: var(--gray-mid); line-height: 1.45; }
+  .benefit-item-text {
+    display: grid;
+    gap: 0.35rem;
+  }
+  .benefit-item-text strong {
+    display: block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    letter-spacing: 0.01em;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 0;
+  }
+  .benefit-item-text span {
+    font-size: 0.95rem;
+    color: var(--gray-mid);
+    line-height: 1.55;
+  }
 
   /* ROLES */
   .roles { background: var(--bg-secondary); }
-  .roles-header { text-align: center; margin: 0 auto 3rem; max-width: 720px; }
+  .roles-header { text-align: center; margin: 0 auto 3.3rem; max-width: 760px; }
   .roles-header h2 span { color: var(--orange); }
-  .roles-header p { max-width: 500px; margin: 0.6rem auto 0; font-size: 0.92rem; color: var(--gray-mid); }
-  .roles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 1rem; }
+  .roles-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 1rem;
+    align-items: stretch;
+  }
   .role-card {
     background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0)), var(--bg-card);
     border: 1px solid var(--border-mid);
-    border-radius: 16px;
-    padding: 1.8rem 1.4rem;
-    text-align: center;
-    transition: all 0.22s;
+    border-radius: 20px;
+    padding: 1.8rem 1.45rem 1.55rem;
+    text-align: left;
+    transition: all 0.24s;
     position: relative;
     overflow: hidden;
   }
@@ -609,35 +680,56 @@
     pointer-events: none;
   }
   .role-card:hover {
-    border-color: var(--orange-border);
+    border-color: rgba(255,255,255,0.22);
     background: var(--bg-card-hover);
     transform: translateY(-4px);
-    box-shadow: 0 18px 42px rgba(0,0,0,0.32);
+    box-shadow: 0 18px 42px rgba(0,0,0,0.32), 0 0 0 1px rgba(249,115,22,0.12);
   }
   .role-card:hover::before { opacity: 1; }
-  .role-ico { width: 38px; height: 38px; margin: 0 auto 1rem; }
-  .role-card h3 { font-size: 0.95rem; margin-bottom: 0.4rem; }
-  .role-card p { font-size: 0.82rem; color: var(--gray-mid); line-height: 1.5; }
+  .role-card:hover .role-ico {
+    filter: drop-shadow(0 0 12px rgba(234,88,12,0.32));
+  }
+  .role-card.top-row { grid-column: span 2; }
+  .role-card.bottom-row {
+    grid-column: span 2;
+    grid-row: 2;
+  }
+  .role-card.bottom-left { grid-column: 2 / span 2; }
+  .role-card.bottom-right { grid-column: 4 / span 2; }
+  .role-ico { width: 36px; height: 36px; margin: 0 0 1rem; }
+  .role-card h3 {
+    font-size: 1.08rem;
+    margin-bottom: 0.45rem;
+    color: var(--white);
+  }
+  .role-card p { font-size: 0.9rem; color: var(--gray-mid); line-height: 1.62; }
 
   /* SECTORS */
-  .sectors-header { text-align: center; margin: 0 auto 2.5rem; max-width: 760px; }
+  .sectors-header { text-align: center; margin: 0 auto 2rem; max-width: 760px; }
   .sectors-header h2 span { color: var(--orange); }
-  .sectors-header p { font-size: 0.9rem; color: var(--gray-mid); margin-top: 0.5rem; }
+  .sectors-header p {
+    max-width: 620px;
+    margin: 0.55rem auto 0;
+    font-size: 0.9rem;
+    color: var(--gray-mid);
+    line-height: 1.6;
+  }
   .sectors-row {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-auto-rows: minmax(150px, 170px);
+    gap: 0.75rem;
     max-width: 1120px;
     margin: 0 auto;
   }
   .sector-card {
     position: relative;
-    min-height: 220px;
-    border-radius: 18px;
+    min-height: 0;
+    border-radius: 22px;
     overflow: hidden;
     border: 1px solid var(--border-mid);
     background: var(--bg-card);
-    box-shadow: 0 16px 40px rgba(0,0,0,0.22);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.18);
     transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
   }
   .sector-card:hover {
@@ -651,16 +743,26 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s ease;
+    filter: saturate(0.92) brightness(0.82);
+    transition: transform 0.45s ease, filter 0.45s ease;
   }
-  .sector-card:hover img { transform: scale(1.05); }
+  .sector-card:hover img {
+    transform: scale(1.05);
+    filter: saturate(1) brightness(0.96);
+  }
   .sector-card::after {
     content: '';
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(180deg, rgba(11,15,20,0.08) 0%, rgba(11,15,20,0.18) 30%, rgba(11,15,20,0.82) 100%),
-      linear-gradient(135deg, rgba(249,115,22,0.12), transparent 55%);
+      linear-gradient(180deg, rgba(11,15,20,0.54) 0%, rgba(11,15,20,0.68) 100%),
+      linear-gradient(135deg, rgba(14,21,32,0.7), rgba(14,21,32,0.62));
+    transition: opacity 0.3s ease, background 0.3s ease;
+  }
+  .sector-card:hover::after {
+    background:
+      linear-gradient(180deg, rgba(11,15,20,0.28) 0%, rgba(11,15,20,0.44) 100%),
+      linear-gradient(135deg, rgba(14,21,32,0.4), rgba(14,21,32,0.28));
   }
   .sector-card-label {
     position: absolute;
@@ -668,25 +770,32 @@
     z-index: 2;
     display: flex;
     align-items: center;
-    gap: 0.55rem;
+    gap: 0.6rem;
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
-    font-size: 1.05rem;
+    font-size: 1.02rem;
     letter-spacing: 0.03em;
-    color: var(--white);
+    color: #e5ecf6;
     text-shadow: 0 4px 14px rgba(0,0,0,0.38);
+    transition: color 0.3s ease;
   }
+  .sector-card:hover .sector-card-label { color: var(--orange); }
   .sect-ico {
     width: 18px;
     height: 18px;
-    stroke: var(--orange);
+    stroke: #d9e2f0;
     fill: none;
     stroke-width: 1.8;
     stroke-linecap: round;
     stroke-linejoin: round;
     opacity: 0.95;
     flex-shrink: 0;
+    transition: stroke 0.3s ease;
   }
+  .sector-card:hover .sect-ico { stroke: var(--orange); }
+  .sector-card.wide { grid-column: span 4; }
+  .sector-card.medium { grid-column: span 4; }
+  .sector-card.small { grid-column: span 3; }
 
   /* WHY */
   .why { background: var(--bg-secondary); }
@@ -768,6 +877,105 @@
   .faq-answer p { font-size: 0.9rem; color: var(--gray-mid); padding-bottom: 1.3rem; line-height: 1.7; }
   .faq-item.open .faq-answer { max-height: 300px; }
 
+  .integrations-section {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.015) 0%, rgba(255,255,255,0) 100%),
+      var(--bg-secondary);
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    overflow: hidden;
+  }
+  .integrations-shell {
+    width: min(100%, var(--shell));
+    margin: 0 auto;
+    display: grid;
+    gap: 2rem;
+  }
+  .integrations-header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+  .integrations-copy { max-width: 720px; }
+  .integrations-copy h2 { margin-bottom: 0.8rem; }
+  .integrations-copy h2 span { color: var(--orange); }
+  .integrations-copy p { max-width: 62ch; }
+  .integrations-marquees { display: grid; gap: 1rem; }
+  .integrations-marquee {
+    position: relative;
+    overflow: hidden;
+    padding: 0.35rem 0;
+    mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  }
+  .integrations-track {
+    display: flex;
+    width: max-content;
+    gap: 1rem;
+    will-change: transform;
+    animation: integrations-marquee 34s linear infinite;
+  }
+  .integrations-marquee.reverse .integrations-track {
+    animation-direction: reverse;
+    animation-duration: 38s;
+  }
+  .integrations-marquee:hover .integrations-track {
+    animation-play-state: paused;
+  }
+  .integration-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+    min-width: 220px;
+    padding: 0.9rem 1rem;
+    border-radius: 18px;
+    border: 1px solid rgba(190,200,216,0.18);
+    background: rgba(255,255,255,0.03);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+  .integration-item.logo-only {
+    min-width: unset;
+    padding: 0.9rem;
+  }
+  .integration-logo {
+    width: 88px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: transparent;
+    border: none;
+  }
+  .integration-logo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: left center;
+    filter: none;
+  }
+  .integration-meta strong {
+    display: block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    margin-bottom: 0.22rem;
+  }
+  .integration-meta span {
+    display: block;
+    color: var(--gray-mid);
+    font-size: 0.8rem;
+    line-height: 1.3;
+  }
+  @keyframes integrations-marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(calc(-50% - 0.5rem)); }
+  }
+
   footer {
     background:
       linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0)),
@@ -796,13 +1004,28 @@
     .platform-visual { order: -1; max-width: 720px; width: 100%; margin: 0 auto; }
     .platform-copy { max-width: 720px; width: 100%; margin: 0 auto; gap: 1rem; }
     .platform-content h2 { max-width: 16ch; }
-    .sectors-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .roles-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .role-card.top-row,
+    .role-card.bottom-row,
+    .role-card.bottom-left,
+    .role-card.bottom-right { grid-column: auto; grid-row: auto; }
+    .sectors-row {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-rows: 180px;
+    }
+    .sector-card.wide,
+    .sector-card.tall,
+    .sector-card.medium,
+    .sector-card.small { grid-column: auto; grid-row: auto; }
     .benefits { grid-template-columns: 1fr; }
-    .benefit-block.alt { border-left: none; border-top: 1px solid var(--border-subtle); }
+    .benefit-block { padding: 0; }
+    .benefit-block.alt { border-top: none; }
+    .integrations-header { flex-direction: column; align-items: flex-start; }
     nav .nav-links li:not(:last-child) { display: none; }
   }
 
   @media (max-width: 640px) {
+    .hero-logo { width: min(100%, 260px); }
     .stats-band-inner { grid-template-columns: 1fr; }
     .trust-stat { min-height: auto; padding: 1.5rem 1.4rem; }
     .trust-stat:not(:last-child)::after {
@@ -821,8 +1044,20 @@
     .platform-carousel-caption { flex-direction: column; align-items: flex-start; }
     .platform-content h2 { max-width: 11ch; font-size: clamp(2.4rem, 10vw, 3.2rem); }
     .feature-row { min-height: 0; padding: 1.05rem 1rem; }
-    .sectors-row { grid-template-columns: 1fr; }
-    .sector-card { min-height: 210px; }
+    .roles-grid { grid-template-columns: 1fr; }
+    .sectors-row { grid-template-columns: 1fr; grid-auto-rows: 190px; }
+    .sector-card { min-height: 0; }
+    .integration-item { min-width: 188px; padding: 0.8rem 0.9rem; }
+    .integration-item.logo-only { min-width: unset; padding: 0.8rem; }
+    .integration-logo { width: 74px; height: 38px; }
+  }
+
+  @media (max-width: 768px) {
+    .pain-layout { grid-template-columns: 1fr; }
+    .pain-visual img {
+      min-height: 0;
+      max-height: 560px;
+    }
   }
 </style>
 </head>
@@ -847,25 +1082,28 @@
   <div class="shell-hero hero-shell">
     <div class="hero-content fade-in">
       <div class="eyebrow">Plataforma integrada de colaboración BIM</div>
-      <h1>Revizto — Toda tu coordinación BIM, <span>conectada en un solo lugar</span></h1>
-      <p class="hero-sub">Revizto centraliza la colaboración BIM en un solo entorno accesible desde oficina y obra, ayudando a reducir retrabajos, detectar conflictos antes y mantener a todos alineados sobre la misma información.</p>
+      <div class="hero-brand">
+        <img class="hero-logo" src="https://wrw.is/wp-content/uploads/2020/01/revizto-logo-8741668.png" alt="Revizto">
+        <h1 class="hero-title">Toda tu coordinación BIM, <span>conectada en un solo lugar</span></h1>
+      </div>
+      <p class="hero-sub">Centraliza modelos, planos, incidencias y seguimiento en un solo entorno para reducir retrabajos, anticipar conflictos y acelerar la toma de decisiones en proyecto.</p>
       <div class="stats-band">
         <div class="stats-band-inner">
           <div class="trust-stat">
             <strong>3,000+</strong>
-            <span>Empresas en todo el mundo</span>
+            <span>empresas en todo el mundo</span>
           </div>
           <div class="trust-stat">
             <strong>20/25</strong>
-            <span>Top ENR firms usan Revizto</span>
+            <span>de las 25 top ENR firms usan Revizto</span>
           </div>
           <div class="trust-stat">
             <strong>100+</strong>
-            <span>Integraciones disponibles</span>
+            <span>integraciones disponibles</span>
           </div>
           <div class="trust-stat">
-            <strong>&lt;24 hrs</strong>
-            <span>Despliegue y adopción inmediata</span>
+            <strong>Rápida</strong>
+            <span>adopción en equipos de oficina y obra</span>
           </div>
         </div>
       </div>
@@ -901,44 +1139,30 @@
   <div class="pain-inner">
     <div class="pain-copy">
       <div class="eyebrow">El problema</div>
-      <h2>La coordinación fragmentada tiene un costo real</h2>
-      <p>La información existe, pero no está donde se necesita. Cuando modelos, planos, incidencias y decisiones viven en herramientas distintas, cada disciplina trabaja con su propia versión de la realidad.</p>
+      <h2>El problema no es la información. <span style="color: var(--orange);">Es que está dispersa.</span></h2>
+      <p>La información existe, pero no donde se necesita. Cuando cada disciplina opera por separado, aumentan las conciliaciones, los retrasos y los errores de coordinación.</p>
     </div>
-    <div class="pain-grid">
-      <div class="pain-card fade-in">
-        <div class="pain-icon-w">
-          <svg class="ico" viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
-        </div>
-        <h3>Modelos sin conexión a planos</h3>
-        <p>Cada disciplina trabaja sobre versiones distintas, forzando reconciliaciones manuales antes de cada reunión de coordinación.</p>
+    <div class="pain-layout">
+      <div class="pain-visual fade-in">
+        <img src="problema-revizto2.png" alt="Silos de información">
       </div>
-      <div class="pain-card fade-in" style="transition-delay:0.08s">
-        <div class="pain-icon-w">
-          <svg class="ico" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/><line x1="9" y1="10" x2="15" y2="10"/></svg>
+      <div class="pain-points">
+        <div class="pain-point fade-in">
+          <h3>Modelos y planos desconectados</h3>
+          <p>Cada disciplina coordina sobre versiones distintas, forzando conciliaciones manuales.</p>
         </div>
-        <h3>Incidencias sin trazabilidad</h3>
-        <p>Los issues se registran en chats, correos y hojas de cálculo. Sin responsable claro, sin estado, sin historial.</p>
-      </div>
-      <div class="pain-card fade-in" style="transition-delay:0.16s">
-        <div class="pain-icon-w">
-          <svg class="ico" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <div class="pain-point fade-in" style="transition-delay:0.08s">
+          <h3>Incidencias sin seguimiento claro</h3>
+          <p>Las observaciones se dispersan en correos y chats, sin trazabilidad ni responsables visibles.</p>
         </div>
-        <h3>Conflictos detectados en obra</h3>
-        <p>Los clashes que debieron resolverse en diseño aparecen durante la construcción, cuando el costo de corrección es máximo.</p>
-      </div>
-      <div class="pain-card fade-in" style="transition-delay:0.24s">
-        <div class="pain-icon-w">
-          <svg class="ico" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/><path d="M9 7h6M9 11h4"/></svg>
+        <div class="pain-point fade-in" style="transition-delay:0.16s">
+          <h3>Conflictos detectados demasiado tarde</h3>
+          <p>Lo que no se resuelve en diseño termina escalando en costo y plazo durante la obra.</p>
         </div>
-        <h3>Campo desconectado de oficina</h3>
-        <p>Los equipos en terreno toman decisiones con información desactualizada porque el acceso desde obra es lento o inexistente.</p>
-      </div>
-      <div class="pain-card fade-in" style="transition-delay:0.32s">
-        <div class="pain-icon-w">
-          <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <div class="pain-point fade-in" style="transition-delay:0.24s">
+          <h3>Oficina y campo sin el mismo contexto</h3>
+          <p>Los equipos en terreno toman decisiones con información incompleta o desactualizada.</p>
         </div>
-        <h3>Reuniones que reemplazan sistemas</h3>
-        <p>Sin un repositorio centralizado, las reuniones de coordinación se convierten en el único mecanismo real de alineación.</p>
       </div>
     </div>
   </div>
@@ -1026,76 +1250,76 @@
 <section style="padding:0;">
   <div class="benefits-shell">
     <div class="benefits">
-    <div class="benefit-block fade-in">
-      <div class="eyebrow">Para el proyecto</div>
-      <h2>Impacto directo en <span>cada proyecto</span></h2>
-      <p>Resultados medibles en tiempo ahorrado, errores evitados y decisiones tomadas con información confiable.</p>
-      <div class="benefit-list">
-        <div class="benefit-item">
-          <div class="ben-ico"><svg class="ico" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
-          <div class="benefit-item-text">
-            <strong>Menos retrabajo en obra</strong>
-            <span>Los conflictos se resuelven antes de que lleguen a construcción, reduciendo órdenes de cambio no planificadas.</span>
+      <div class="benefit-block fade-in">
+        <div class="eyebrow">PARA EL PROYECTO</div>
+        <h2>Impacto operativo en cada proyecto</h2>
+        <p>Resultados visibles en tiempo, costo y coordinación.</p>
+        <div class="benefit-list">
+          <div class="benefit-item">
+            <div class="ben-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M14.7 6.3l3 3"/><path d="M5 21l3.5-.8 9.8-9.8-2.7-2.6-9.8 9.8L5 21z"/><path d="M12 4l2-2 4 4-2 2"/></svg></div>
+            <div class="benefit-item-text">
+              <strong>Menos retrabajo en obra</strong>
+              <span>Resuelve conflictos en el modelo antes de construir.</span>
+            </div>
           </div>
-        </div>
-        <div class="benefit-item">
-          <div class="ben-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
-          <div class="benefit-item-text">
-            <strong>Coordinación interdisciplinaria fluida</strong>
-            <span>Arquitectura, estructuras e instalaciones trabajan sobre el mismo modelo federado sin fricciones de versión.</span>
+          <div class="benefit-item">
+            <div class="ben-ico"><svg class="ico" viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M3 19a5 5 0 015-5"/><path d="M21 19a5 5 0 00-5-5"/><path d="M8 13h8"/><path d="M12 13v6"/></svg></div>
+            <div class="benefit-item-text">
+              <strong>Coordinación fluida</strong>
+              <span>Todas las disciplinas trabajan sobre un mismo contexto federado.</span>
+            </div>
           </div>
-        </div>
-        <div class="benefit-item">
-          <div class="ben-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
-          <div class="benefit-item-text">
-            <strong>Decisiones documentadas y trazables</strong>
-            <span>Cada resolución de issue queda registrada con fecha, responsable y contexto. Sin ambigüedades ni acuerdos informales.</span>
+          <div class="benefit-item">
+            <div class="ben-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M8 3h8l4 4v12a2 2 0 01-2 2H6a2 2 0 01-2-2V5a2 2 0 012-2z"/><path d="M8 12l2.5 2.5L16 9"/></svg></div>
+            <div class="benefit-item-text">
+              <strong>Decisiones trazables</strong>
+              <span>Cada issue conserva responsable, estado y contexto.</span>
+            </div>
           </div>
-        </div>
-        <div class="benefit-item">
-          <div class="ben-ico"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-          <div class="benefit-item-text">
-            <strong>Visibilidad del avance sin reportes manuales</strong>
-            <span>Estado de clashes, issues abiertos y pendientes críticos disponibles en tiempo real para todo el equipo.</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="benefit-block alt fade-in" style="transition-delay:0.15s">
-      <div class="eyebrow">Para la organización</div>
-      <h2>Valor que escala con tu <span>operación</span></h2>
-      <p>Revizto no es solo una herramienta de proyecto. Es la base sobre la que las organizaciones AECO estandarizan y escalan su práctica BIM.</p>
-      <div class="benefit-list">
-        <div class="benefit-item">
-          <div class="ben-ico"><svg class="ico" viewBox="0 0 24 24"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg></div>
-          <div class="benefit-item-text">
-            <strong>Estándar de coordinación entre proyectos</strong>
-            <span>Un proceso reproducible y auditado que no depende de individuos ni de herramientas ad hoc para funcionar.</span>
-          </div>
-        </div>
-        <div class="benefit-item">
-          <div class="ben-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-          <div class="benefit-item-text">
-            <strong>Control y seguridad a nivel enterprise</strong>
-            <span>Permisos granulares por proyecto y disciplina, control de acceso y cumplimiento de estándares corporativos de datos.</span>
-          </div>
-        </div>
-        <div class="benefit-item">
-          <div class="ben-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
-          <div class="benefit-item-text">
-            <strong>Adopción sin fricción a escala</strong>
-            <span>La curva de aprendizaje baja permite que perfiles técnicos y no técnicos adopten la plataforma desde el primer proyecto.</span>
-          </div>
-        </div>
-        <div class="benefit-item">
-          <div class="ben-ico"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg></div>
-          <div class="benefit-item-text">
-            <strong>Integrado al ecosistema existente</strong>
-            <span>Conecta con ACC, Procore, SharePoint y más de 100 sistemas. Revizto se incorpora a tu stack sin reemplazarlo.</span>
+          <div class="benefit-item">
+            <div class="ben-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg></div>
+            <div class="benefit-item-text">
+              <strong>Seguimiento sin reportes manuales</strong>
+              <span>Clashes, pendientes y avances visibles para todo el equipo.</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      <div class="benefit-block alt fade-in" style="transition-delay:0.15s">
+        <div class="eyebrow">PARA LA ORGANIZACIÓN</div>
+        <h2>Valor estratégico a escala</h2>
+        <p>La base para estandarizar y escalar tu práctica BIM corporativa.</p>
+        <div class="benefit-list">
+          <div class="benefit-item">
+            <div class="ben-ico"><svg class="ico" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 11l7.6-4"/><path d="M8.2 13l7.6 4"/></svg></div>
+            <div class="benefit-item-text">
+              <strong>Estándar corporativo</strong>
+              <span>Proceso reproducible y auditable entre proyectos.</span>
+            </div>
+          </div>
+          <div class="benefit-item">
+            <div class="ben-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z"/><path d="M9.5 12l1.7 1.7L14.8 10"/></svg></div>
+            <div class="benefit-item-text">
+              <strong>Control a nivel enterprise</strong>
+              <span>Permisos granulares y gobernanza por proyecto y disciplina.</span>
+            </div>
+          </div>
+          <div class="benefit-item">
+            <div class="ben-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M4 16l5-5 4 4 7-8"/><path d="M16 7h4v4"/></svg></div>
+            <div class="benefit-item-text">
+              <strong>Adopción sin fricción</strong>
+              <span>Equipos técnicos y no técnicos lo usan rápidamente.</span>
+            </div>
+          </div>
+          <div class="benefit-item">
+            <div class="ben-ico"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1 1 0 00.2 1.1l.1.1a2 2 0 010 2.8 2 2 0 01-2.8 0l-.1-.1a1 1 0 00-1.1-.2 1 1 0 00-.6.9V20a2 2 0 01-4 0v-.2a1 1 0 00-.6-.9 1 1 0 00-1.1.2l-.1.1a2 2 0 01-2.8 0 2 2 0 010-2.8l.1-.1a1 1 0 00.2-1.1 1 1 0 00-.9-.6H4a2 2 0 010-4h.2a1 1 0 00.9-.6 1 1 0 00-.2-1.1l-.1-.1a2 2 0 010-2.8 2 2 0 012.8 0l.1.1a1 1 0 001.1.2H9a1 1 0 00.6-.9V4a2 2 0 014 0v.2a1 1 0 00.6.9 1 1 0 001.1-.2l.1-.1a2 2 0 012.8 0 2 2 0 010 2.8l-.1.1a1 1 0 00-.2 1.1V9c0 .4.2.7.6.9h.2a2 2 0 010 4h-.2a1 1 0 00-.9.6z"/></svg></div>
+            <div class="benefit-item-text">
+              <strong>Ecosistema integrado</strong>
+              <span>Se conecta a tu stack actual sin reemplazarlo.</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1104,36 +1328,35 @@
 <section class="roles" id="roles">
   <div class="shell">
     <div class="roles-header fade-in">
-      <div class="eyebrow">Para quién</div>
+      <div class="eyebrow">PARA QUIÉN</div>
       <h2>Diseñado para cada <span>perfil del proyecto</span></h2>
-      <p>Desde el BIM Manager hasta el supervisor de obra. Revizto se adapta al nivel de detalle y acceso que necesita cada rol.</p>
     </div>
     <div class="roles-grid">
-    <div class="role-card fade-in">
-      <div class="role-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></div>
-      <h3>Arquitectos</h3>
-      <p>Comunica cambios de diseño con contexto visual directo sobre el modelo, sin depender de correos.</p>
-    </div>
-    <div class="role-card fade-in" style="transition-delay:0.08s">
-      <div class="role-ico"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M21 12h-2M5 12H3M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M12 19v2M12 3v2"/></svg></div>
-      <h3>Ingenieros BIM</h3>
-      <p>Gestiona detección de clashes y coordinación interdisciplinaria directamente en el entorno de colaboración.</p>
-    </div>
-    <div class="role-card fade-in" style="transition-delay:0.16s">
-      <div class="role-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-      <h3>Contratistas generales</h3>
-      <p>Monitorea el estado de issues y clashes por disciplina con visibilidad completa del frente de coordinación.</p>
-    </div>
-    <div class="role-card fade-in" style="transition-delay:0.24s">
-      <div class="role-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div>
-      <h3>Subcontratistas</h3>
-      <p>Accede a planos e issues desde obra en dispositivos móviles, con soporte offline para trabajo en campo.</p>
-    </div>
-    <div class="role-card fade-in" style="transition-delay:0.32s">
-      <div class="role-ico"><svg class="ico" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-      <h3>Project Managers / VDC</h3>
-      <p>Toma decisiones con métricas reales de coordinación, sin depender de reportes manuales ni reuniones de alineación.</p>
-    </div>
+      <div class="role-card top-row fade-in">
+        <div class="role-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M3 5h7a3 3 0 013 3v11a2 2 0 00-2-2H3z"/><path d="M21 5h-7a3 3 0 00-3 3v11a2 2 0 012-2h8z"/></svg></div>
+        <h3>Arquitectos</h3>
+        <p>Revisan cambios con contexto visual, sin cadenas de correo.</p>
+      </div>
+      <div class="role-card top-row fade-in" style="transition-delay:0.08s">
+        <div class="role-ico"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M4.93 4.93l2.12 2.12"/><path d="M16.95 16.95l2.12 2.12"/><path d="M2 12h3"/><path d="M19 12h3"/><path d="M4.93 19.07l2.12-2.12"/><path d="M16.95 7.05l2.12-2.12"/></svg></div>
+        <h3>Ingenieros BIM</h3>
+        <p>Gestionan clashes e issues en un solo entorno.</p>
+      </div>
+      <div class="role-card top-row fade-in" style="transition-delay:0.16s">
+        <div class="role-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M9 20v-5h6v5"/><path d="M5 20l-2 2"/><path d="M19 20l2 2"/></svg></div>
+        <h3>Contratistas generales</h3>
+        <p>Monitorean pendientes y frentes de coordinación.</p>
+      </div>
+      <div class="role-card bottom-row bottom-left fade-in" style="transition-delay:0.24s">
+        <div class="role-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div>
+        <h3>Subcontratistas</h3>
+        <p>Acceden a planos e incidencias desde el campo.</p>
+      </div>
+      <div class="role-card bottom-row bottom-right fade-in" style="transition-delay:0.32s">
+        <div class="role-ico"><svg class="ico" viewBox="0 0 24 24"><line x1="6" y1="20" x2="6" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="18" y1="20" x2="18" y2="13"/></svg></div>
+        <h3>PM / VDC</h3>
+        <p>Toman decisiones con trazabilidad y métricas reales.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -1142,48 +1365,41 @@
 <section>
   <div class="shell-tight">
     <div class="sectors-header fade-in">
-      <div class="eyebrow">Sectores</div>
-      <h2>Válido para proyectos de <span>alta complejidad</span></h2>
-      <p>Revizto opera en los entornos más exigentes del sector AECO, desde edificación hasta infraestructura crítica.</p>
+      <div class="eyebrow">SECTORES</div>
+      <h2>Válido para <span>todo tipo de proyectos</span></h2>
+      <p>Revizto se adapta a distintas tipologías del entorno AECO, desde edificación hasta infraestructura crítica.</p>
     </div>
     <div class="sectors-row fade-in">
-      <article class="sector-card">
+      <article class="sector-card wide">
         <img src="https://images.unsplash.com/photo-1574848296471-28f79a036f79?auto=format&fit=crop&fm=jpg&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bW9kZXJuJTIwYnVpbGRpbmd8ZW58MHx8MHx8fDA%3D&ixlib=rb-4.1.0&q=60&w=1600" alt="Edificación moderna">
         <div class="sector-card-label"><svg class="sect-ico" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="15" rx="1"/><path d="M2 12h20"/></svg>Edificación</div>
       </article>
-      <article class="sector-card">
+      <article class="sector-card wide">
         <img src="https://images.unsplash.com/photo-1721595279388-085728677a50?auto=format&fit=crop&fm=jpg&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8aW5mcmFzdHJ1Y3R1cmV8ZW58MHx8MHx8fDA%3D&ixlib=rb-4.1.0&q=60&w=1600" alt="Infraestructura vial vista desde arriba">
         <div class="sector-card-label"><svg class="sect-ico" viewBox="0 0 24 24"><path d="M2 17l10-10 10 10"/><path d="M5 14l7-7 7 7"/></svg>Infraestructura</div>
       </article>
-      <article class="sector-card">
+      <article class="sector-card small">
         <img src="https://images.unsplash.com/photo-1754073169082-80426401c9dc?auto=format&fit=crop&fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.1.0&q=60&w=1600" alt="Avión en terminal de aeropuerto">
         <div class="sector-card-label"><svg class="sect-ico" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>Aeropuertos</div>
       </article>
-      <article class="sector-card">
+      <article class="sector-card small">
         <img src="https://images.pexels.com/photos/5408005/pexels-photo-5408005.jpeg?cs=srgb&dl=pexels-brett-sayles-5408005.jpg&fm=jpg" alt="Racks de servidores en data center">
         <div class="sector-card-label"><svg class="sect-ico" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Data Centers</div>
       </article>
-      <article class="sector-card">
+      <article class="sector-card small">
         <img src="https://images.unsplash.com/photo-1726731782158-fcf6822b6ca4?auto=format&fit=crop&fm=jpg&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8aW5kdXN0cmlhbCUyMHBsYW50fGVufDB8fDB8fHww&ixlib=rb-4.1.0&q=60&w=1600" alt="Planta industrial">
         <div class="sector-card-label"><svg class="sect-ico" viewBox="0 0 24 24"><path d="M2 20h20M5 20V8l7-5 7 5v12"/></svg>Industrial</div>
       </article>
-      <article class="sector-card">
-        <img src="https://images.pexels.com/photos/29506757/pexels-photo-29506757.jpeg?cs=srgb&dl=pexels-deyler-rivera-segura-1300296248-29506757.jpg&fm=jpg" alt="Operación minera a cielo abierto">
-        <div class="sector-card-label"><svg class="sect-ico" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Minería</div>
-      </article>
-      <article class="sector-card">
+      <article class="sector-card medium">
         <img src="https://images.unsplash.com/photo-1587351021355-a479a299d2f9?auto=format&fit=crop&fm=jpg&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8aG9zcGl0YWwlMjBidWlsZGluZ3xlbnwwfHwwfHx8MA%3D%3D&ixlib=rb-4.1.0&q=60&w=1600" alt="Hospital y servicios de salud">
         <div class="sector-card-label"><svg class="sect-ico" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Salud</div>
-      </article>
-      <article class="sector-card">
-        <img src="https://images.unsplash.com/photo-1583373834259-46cc92173cb7?auto=format&fit=crop&fm=jpg&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dW5pdmVyc2l0eSUyMGNhbXB1c3xlbnwwfHwwfHx8MA%3D%3D&ixlib=rb-4.1.0&q=60&w=1600" alt="Campus universitario">
-        <div class="sector-card-label"><svg class="sect-ico" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Campus</div>
       </article>
     </div>
   </div>
 </section>
 
-<!-- WHY -->
+<!--
+WHY
 <section class="why">
   <div class="shell">
     <div class="why-header fade-in">
@@ -1237,6 +1453,78 @@
     </div>
   </div>
 </section>
+-->
+
+<!-- INTEGRATIONS -->
+<section class="integrations-section">
+  <div class="integrations-shell">
+    <div class="integrations-header fade-in">
+      <div class="integrations-copy">
+        <div class="eyebrow">100+ Plugins, formatos, partners y CDE integrations</div>
+        <h2>Conecta tu flujo de trabajo <span>sin fricción</span></h2>
+        <p>Revizto se integra con las herramientas que tu equipo ya usa para modelado, coordinación, documentación y gestión de proyecto, manteniendo un entorno único para oficina y obra.</p>
+      </div>
+    </div>
+
+    <div class="integrations-marquees fade-in" style="transition-delay:0.1s">
+      <div class="integrations-marquee">
+        <div class="integrations-track">
+          <div class="integration-item"><div class="integration-logo logo-card"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa6a0d0a802084c601229a_Integrations-24.svg" alt="Procore"></div><div class="integration-meta"><strong>Procore</strong></div></div>
+          <div class="integration-item"><div class="integration-logo logo-card"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa6a1ca7102f6f11acaccb_Integrations-25.svg" alt="OpenSpace"></div><div class="integration-meta"><strong>OpenSpace</strong></div></div>
+          <div class="integration-item"><div class="integration-logo logo-card"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa6a2ad02cdabf91ea5053_Integrations-26.svg" alt="Rhinoceros"></div><div class="integration-meta"><strong>Rhinoceros</strong></div></div>
+          <div class="integration-item"><div class="integration-logo logo-card"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa6a4b296e2bac527de271_Integrations-28.svg" alt="AutoCAD"></div><div class="integration-meta"><strong>AutoCAD</strong></div></div>
+          <div class="integration-item"><div class="integration-logo logo-card light is-light"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa6a6f4896dd705bc1b0f9_Integrations-30.svg" alt="ReCap"></div><div class="integration-meta"><strong>ReCap</strong></div></div>
+          <div class="integration-item"><div class="integration-logo pdf"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa6a3967bc066e1b4b634a_Integrations-27.svg" alt="PDF"></div><div class="integration-meta"><strong>PDF</strong></div></div>
+          <div class="integration-item"><div class="integration-logo ifc is-light"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa68ad1d1dd3905256247e_Integrations-6.svg" alt="IFC"></div><div class="integration-meta"><strong>IFC</strong></div></div>
+          <div class="integration-item"><div class="integration-logo box"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa68b98b87768b10d49e93_Integrations-7.svg" alt="Box"></div><div class="integration-meta"><strong>Box</strong></div></div>
+          <div class="integration-item"><div class="integration-logo logo-card"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa68c955bf0262a5e5f882_Integrations-8.svg" alt="Fusion"></div><div class="integration-meta"><strong>Fusion</strong></div></div>
+          <div class="integration-item logo-only"><div class="integration-logo logo-card is-bare"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa68d707fcf553c1f854ed_Integrations-9.svg" alt="Integración"></div></div>
+          <div class="integration-item logo-only"><div class="integration-logo logo-card is-bare"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa68e8f1f82d33b54cd131_Integrations-10.svg" alt="Integración"></div></div>
+          <div class="integration-item logo-only"><div class="integration-logo logo-card is-bare"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa68f9c073aadc17afd587_Integrations-11.svg" alt="Integración"></div></div>
+
+          <div class="integration-item" aria-hidden="true"><div class="integration-logo logo-card"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa6a0d0a802084c601229a_Integrations-24.svg" alt="Procore"></div><div class="integration-meta"><strong>Procore</strong></div></div>
+          <div class="integration-item" aria-hidden="true"><div class="integration-logo logo-card"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa6a1ca7102f6f11acaccb_Integrations-25.svg" alt="OpenSpace"></div><div class="integration-meta"><strong>OpenSpace</strong></div></div>
+          <div class="integration-item" aria-hidden="true"><div class="integration-logo logo-card"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa6a2ad02cdabf91ea5053_Integrations-26.svg" alt="Rhinoceros"></div><div class="integration-meta"><strong>Rhinoceros</strong></div></div>
+          <div class="integration-item" aria-hidden="true"><div class="integration-logo logo-card"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa6a4b296e2bac527de271_Integrations-28.svg" alt="AutoCAD"></div><div class="integration-meta"><strong>AutoCAD</strong></div></div>
+          <div class="integration-item" aria-hidden="true"><div class="integration-logo logo-card light is-light"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa6a6f4896dd705bc1b0f9_Integrations-30.svg" alt="ReCap"></div><div class="integration-meta"><strong>ReCap</strong></div></div>
+          <div class="integration-item" aria-hidden="true"><div class="integration-logo pdf"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa6a3967bc066e1b4b634a_Integrations-27.svg" alt="PDF"></div><div class="integration-meta"><strong>PDF</strong></div></div>
+          <div class="integration-item" aria-hidden="true"><div class="integration-logo ifc is-light"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa68ad1d1dd3905256247e_Integrations-6.svg" alt="IFC"></div><div class="integration-meta"><strong>IFC</strong></div></div>
+          <div class="integration-item" aria-hidden="true"><div class="integration-logo box"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa68b98b87768b10d49e93_Integrations-7.svg" alt="Box"></div><div class="integration-meta"><strong>Box</strong></div></div>
+          <div class="integration-item" aria-hidden="true"><div class="integration-logo logo-card"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa68c955bf0262a5e5f882_Integrations-8.svg" alt="Fusion"></div><div class="integration-meta"><strong>Fusion</strong></div></div>
+          <div class="integration-item logo-only" aria-hidden="true"><div class="integration-logo logo-card is-bare"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa68d707fcf553c1f854ed_Integrations-9.svg" alt="Integración"></div></div>
+          <div class="integration-item logo-only" aria-hidden="true"><div class="integration-logo logo-card is-bare"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa68e8f1f82d33b54cd131_Integrations-10.svg" alt="Integración"></div></div>
+          <div class="integration-item logo-only" aria-hidden="true"><div class="integration-logo logo-card is-bare"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa68f9c073aadc17afd587_Integrations-11.svg" alt="Integración"></div></div>
+        </div>
+      </div>
+
+      <div class="integrations-marquee reverse">
+        <div class="integrations-track">
+          <div class="integration-item"><div class="integration-logo logo-card"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa69b1a0172dc0822b2427_Integrations-19.svg" alt="Navisworks"></div><div class="integration-meta"><strong>Navisworks</strong></div></div>
+          <div class="integration-item logo-only"><div class="integration-logo logo-card is-bare"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa69d67f10829ab1f29589_Integrations-21.svg" alt="Integración"></div></div>
+          <div class="integration-item"><div class="integration-logo logo-card"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa69e9799045414e3683c4_Integrations-22.svg" alt="Trimble Connect"></div><div class="integration-meta"><strong>Trimble Connect</strong></div></div>
+          <div class="integration-item"><div class="integration-logo logo-card"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa69fdff145d5bbcefdbea_Integrations-23.svg" alt="OpenRoads"></div><div class="integration-meta"><strong>OpenRoads</strong></div></div>
+          <div class="integration-item"><div class="integration-logo logo-card"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa692fe97bde5a60e1276a_Integrations-14.svg" alt="Gamma AR"></div><div class="integration-meta"><strong>Gamma AR</strong></div></div>
+          <div class="integration-item logo-only"><div class="integration-logo logo-card is-bare"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa695b8210bd5a23083ae2_Integrations-15.svg" alt="Integración"></div></div>
+          <div class="integration-item"><div class="integration-logo logo-card"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa6a3967bc066e1b4b634a_Integrations-27.svg" alt="PDF"></div><div class="integration-meta"><strong>PDF</strong></div></div>
+          <div class="integration-item"><div class="integration-logo box"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa68b98b87768b10d49e93_Integrations-7.svg" alt="Box"></div><div class="integration-meta"><strong>Box</strong></div></div>
+          <div class="integration-item"><div class="integration-logo logo-card"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa68c955bf0262a5e5f882_Integrations-8.svg" alt="Fusion"></div><div class="integration-meta"><strong>Fusion</strong></div></div>
+          <div class="integration-item"><div class="integration-logo ifc is-light"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa68ad1d1dd3905256247e_Integrations-6.svg" alt="IFC"></div><div class="integration-meta"><strong>IFC</strong></div></div>
+
+          <div class="integration-item" aria-hidden="true"><div class="integration-logo logo-card"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa69b1a0172dc0822b2427_Integrations-19.svg" alt="Navisworks"></div><div class="integration-meta"><strong>Navisworks</strong></div></div>
+          <div class="integration-item logo-only" aria-hidden="true"><div class="integration-logo logo-card is-bare"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa69d67f10829ab1f29589_Integrations-21.svg" alt="Integración"></div></div>
+          <div class="integration-item" aria-hidden="true"><div class="integration-logo logo-card"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa69e9799045414e3683c4_Integrations-22.svg" alt="Trimble Connect"></div><div class="integration-meta"><strong>Trimble Connect</strong></div></div>
+          <div class="integration-item" aria-hidden="true"><div class="integration-logo logo-card"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa69fdff145d5bbcefdbea_Integrations-23.svg" alt="OpenRoads"></div><div class="integration-meta"><strong>OpenRoads</strong></div></div>
+          <div class="integration-item" aria-hidden="true"><div class="integration-logo logo-card"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa692fe97bde5a60e1276a_Integrations-14.svg" alt="Gamma AR"></div><div class="integration-meta"><strong>Gamma AR</strong></div></div>
+          <div class="integration-item logo-only" aria-hidden="true"><div class="integration-logo logo-card is-bare"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa695b8210bd5a23083ae2_Integrations-15.svg" alt="Integración"></div></div>
+          <div class="integration-item" aria-hidden="true"><div class="integration-logo logo-card"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa6a3967bc066e1b4b634a_Integrations-27.svg" alt="PDF"></div><div class="integration-meta"><strong>PDF</strong></div></div>
+          <div class="integration-item" aria-hidden="true"><div class="integration-logo box"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa68b98b87768b10d49e93_Integrations-7.svg" alt="Box"></div><div class="integration-meta"><strong>Box</strong></div></div>
+          <div class="integration-item" aria-hidden="true"><div class="integration-logo logo-card"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa68c955bf0262a5e5f882_Integrations-8.svg" alt="Fusion"></div><div class="integration-meta"><strong>Fusion</strong></div></div>
+          <div class="integration-item" aria-hidden="true"><div class="integration-logo ifc is-light"><img src="https://cdn.prod.website-files.com/68e03e9b83809bb54b2c86e7/68fa68ad1d1dd3905256247e_Integrations-6.svg" alt="IFC"></div><div class="integration-meta"><strong>IFC</strong></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- CTA FINAL -->
 <section class="cta-final" id="cta">
@@ -1262,31 +1550,57 @@
     </div>
     <div class="faq-item">
       <button class="faq-question">¿Qué es Revizto y para qué sirve? <span class="faq-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
-      <div class="faq-answer"><p>Revizto es una plataforma de colaboración BIM que centraliza modelos 3D, planos 2D, gestión de issues y coordinación de clashes en un único entorno. Está pensada para que todos los actores del proyecto, desde diseño hasta obra, trabajen sobre la misma información sin cambiar de herramienta.</p></div>
+      <div class="faq-answer">
+        <p>Revizto es una plataforma de colaboración BIM que centraliza modelos 3D, planos 2D, issues y coordinación de clashes en un solo entorno. Permite que diseño, ingeniería, coordinación y obra trabajen sobre la misma información, con trazabilidad y contexto compartido.</p>
+      </div>
     </div>
     <div class="faq-item">
       <button class="faq-question">¿Revizto reemplaza Revit o Navisworks? <span class="faq-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
-      <div class="faq-answer"><p>No. Revizto no es una herramienta de modelado. Complementa tu stack actual: importa modelos desde Revit, Navisworks, IFC y otras fuentes, y actúa como el entorno de coordinación y colaboración sobre esos modelos. Tu flujo de trabajo de modelado no cambia.</p></div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-question">¿En qué se diferencia de otras plataformas BIM del mercado? <span class="faq-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
-      <div class="faq-answer"><p>A diferencia de soluciones centradas solo en gestión documental o solo en clash detection, Revizto unifica en un mismo entorno la navegación de modelos, la trazabilidad de issues y la coordinación entre disciplinas. Eso elimina la necesidad de sincronizar información entre múltiples herramientas.</p></div>
+      <div class="faq-answer">
+        <p>No. Revizto no reemplaza tus herramientas de modelado o autoría. Se integra a tu flujo actual y funciona como entorno de coordinación, revisión y colaboración sobre modelos provenientes de Revit, Navisworks, IFC y otras fuentes.</p>
+      </div>
     </div>
     <div class="faq-item">
       <button class="faq-question">¿Funciona tanto en fase de diseño como en construcción? <span class="faq-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
-      <div class="faq-answer"><p>Sí. En diseño e ingeniería, centraliza la coordinación de modelos y la detección de clashes. En construcción, conecta a los equipos de campo con la información actualizada del proyecto a través de dispositivos móviles con soporte offline completo.</p></div>
+      <div class="faq-answer">
+        <p>Sí. En diseño e ingeniería ayuda a coordinar modelos, revisar incidencias y resolver clashes. En construcción conecta oficina y campo con información actualizada, acceso móvil y seguimiento de issues directamente en contexto.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">¿Quién me ayuda a implementar Revizto? <span class="faq-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+      <div class="faq-answer">
+        <p>Digital Bricks te acompaña en la implementación de Revizto de punta a punta. Te ayudamos a configurar el entorno, definir el flujo de coordinación, establecer buenas prácticas y asegurar que el equipo adopte la plataforma desde el inicio.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">¿Cuánto tiempo toma implementarlo en un proyecto u organización? <span class="faq-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+      <div class="faq-answer">
+        <p>Depende del alcance y del nivel de madurez del equipo, pero con el acompañamiento de Digital Bricks la puesta en marcha suele ser ágil. En muchos casos, los equipos pueden comenzar a operar sobre un primer proyecto en poco tiempo con soporte inicial y estructura clara.</p>
+      </div>
     </div>
     <div class="faq-item">
       <button class="faq-question">¿Se puede usar desde dispositivos móviles y sin conexión? <span class="faq-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
-      <div class="faq-answer"><p>Sí. Revizto tiene aplicaciones nativas para iOS y Android con soporte offline completo. Los equipos en terreno pueden acceder a modelos, planos e issues sin internet, y los cambios se sincronizan automáticamente al recuperar señal.</p></div>
+      <div class="faq-answer">
+        <p>Sí. Revizto cuenta con aplicaciones móviles para trabajo en campo y soporte offline, permitiendo consultar modelos, planos e incidencias incluso sin conexión. Cuando se recupera la señal, la información se sincroniza.</p>
+      </div>
     </div>
     <div class="faq-item">
       <button class="faq-question">¿Se integra con ACC, Procore, SharePoint u otros sistemas? <span class="faq-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
-      <div class="faq-answer"><p>Sí. Revizto cuenta con más de 100 integraciones nativas, incluyendo Autodesk Construction Cloud (ACC), Procore, SharePoint y otros sistemas de gestión de construcción y documentación. También dispone de API para integraciones a medida.</p></div>
+      <div class="faq-answer">
+        <p>Sí. Revizto puede integrarse con plataformas como ACC, Procore, SharePoint y otros entornos del ecosistema AECO. Esto permite conectarlo a tu stack actual sin reemplazar herramientas que ya funcionan dentro de tu operación.</p>
+      </div>
     </div>
     <div class="faq-item">
-      <button class="faq-question">¿Cuánto tiempo toma implementarlo en una organización? <span class="faq-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
-      <div class="faq-answer"><p>La implementación es significativamente más rápida que la mayoría de plataformas enterprise. Los equipos pueden estar operativos desde el primer proyecto, sin consultoría de meses. El equipo de Revizto acompaña el onboarding y la configuración inicial.</p></div>
+      <button class="faq-question">¿Cuento con certificaciones? <span class="faq-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+      <div class="faq-answer">
+        <p>Sí. En Digital Bricks también ofrecemos capacitación y certificación para equipos que quieran formalizar su dominio de Revizto. Podemos orientarte según el perfil de usuario, coordinador o equipo completo.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">¿Dónde me puedo capacitar o aprender a usarlo mejor? <span class="faq-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+      <div class="faq-answer">
+        <p>En Digital Bricks ofrecemos onboarding, sesiones de capacitación y acompañamiento para equipos que buscan adoptar Revizto con mayor velocidad. También podemos recomendarte la ruta de aprendizaje más adecuada según tu rol y nivel de experiencia.</p>
+      </div>
     </div>
   </div>
 </section>
