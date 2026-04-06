@@ -578,6 +578,10 @@
 
   /* BENEFITS */
   .benefits-shell { width: min(100%, var(--shell)); margin: 0 auto; }
+  .benefits-header {
+    padding-top: 88px;
+    margin-bottom: -0.5rem;
+  }
   .benefits {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -588,6 +592,21 @@
     padding: 88px 0;
     position: relative;
     overflow: visible;
+  }
+  .benefit-label {
+    display: inline-block;
+    margin-bottom: 1rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--orange);
+    background: var(--orange-dim);
+    border: 1px solid var(--orange-border);
+    padding: 0.28rem 0.75rem;
+    border-radius: 3px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
   }
   .benefit-block.alt {
     background:
@@ -1971,6 +1990,9 @@
 <!-- BENEFITS -->
 <section style="padding:0;">
   <div class="benefits-shell">
+    <div class="benefits-header fade-in">
+      <div class="benefit-label">Beneficios</div>
+    </div>
     <div class="benefits">
       <div class="benefit-block fade-in">
         <h2>Impacto operativo en cada proyecto</h2>
