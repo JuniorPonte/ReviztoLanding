@@ -5,26 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Plataforma integrada de colaboración BIM</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg-primary: #0b0f14;
-    --bg-secondary: #0e1520;
-    --bg-card: #121a26;
-    --bg-card-hover: #162030;
-    --bg-card-deep: #0f1722;
-    --red-top: #7a0000;
+    --bg-primary: #000000;
+    --bg-secondary: #0a0a0a;
+    --bg-card: #111111;
+    --bg-card-hover: #151515;
+    --bg-card-deep: #080808;
+    --red-top: #0a0a0a;
     --orange: #f97316;
     --orange-dark: #e06010;
     --orange-soft: #ff9a4d;
     --orange-dim: rgba(249,115,22,0.1);
-    --orange-glow: rgba(249,115,22,0.18);
+    --orange-glow: rgba(249,115,22,0.12);
     --orange-border: rgba(249,115,22,0.2);
     --white: #ffffff;
-    --gray-light: #bec8d8;
-    --gray-mid: #7a8899;
-    --border-subtle: rgba(255,255,255,0.06);
-    --border-mid: rgba(255,255,255,0.09);
+    --gray-light: #a3a3a3;
+    --gray-mid: #737373;
+    --border-subtle: rgba(255,255,255,0.08);
+    --border-mid: rgba(255,255,255,0.1);
     --shell: 1200px;
     --shell-hero: 1400px;
     --shell-tight: 1100px;
@@ -33,62 +33,172 @@
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; scroll-padding-top: 118px; }
 
   body {
     background:
-      radial-gradient(circle at top right, rgba(249,115,22,0.08), transparent 26%),
-      radial-gradient(circle at 20% 20%, rgba(255,255,255,0.03), transparent 18%),
+      radial-gradient(circle at 80% 10%, rgba(249,115,22,0.05), transparent 24%),
+      radial-gradient(circle at 15% 0%, rgba(255,255,255,0.02), transparent 16%),
       var(--bg-primary);
     color: var(--white);
     font-family: 'Barlow', sans-serif;
     font-size: 16px;
-    line-height: 1.7;
+    line-height: 1.8;
     overflow-x: hidden;
   }
 
-  .topbar { background: var(--red-top); height: 6px; width: 100%; }
+  .topbar { display: none; }
 
-  nav {
-    position: sticky; top: 0; z-index: 100;
-    background: rgba(11,15,20,0.96);
-    backdrop-filter: blur(14px);
-    border-bottom: 1px solid var(--border-subtle);
-    padding: 0 var(--gutter);
+  .db-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #000;
+    transition: transform 0.32s ease, background-color 0.28s ease, border-color 0.28s ease;
+    will-change: transform;
   }
-  .nav-inner {
-    width: min(100%, var(--shell-hero));
+  .db-header .nav-inner {
+    width: 100%;
+    max-width: 1850px;
     margin: 0 auto;
-    display: flex; align-items: center; justify-content: space-between;
-    height: 62px;
+    padding: 0 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    height: 106px;
   }
 
   .nav-logo {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900; font-size: 1.55rem; letter-spacing: 0.06em;
-    color: var(--white); text-decoration: none; text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    text-decoration: none;
   }
-  .nav-logo span { color: var(--orange); }
-
-  .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
-  .nav-links a {
-    color: var(--gray-mid); text-decoration: none;
-    font-size: 0.875rem; font-weight: 500; letter-spacing: 0.03em;
-    transition: color 0.2s;
+  .nav-logo img {
+    display: block;
+    width: auto;
+    height: 34px;
   }
-  .nav-links a:hover { color: var(--white); }
 
-  .nav-cta {
-    background: var(--orange) !important; color: #000 !important;
-    font-family: 'Barlow Condensed', sans-serif !important;
-    font-weight: 700 !important; font-size: 0.85rem !important;
-    letter-spacing: 0.08em !important; text-transform: uppercase !important;
-    padding: 0.42rem 1.1rem !important; border-radius: 5px !important;
-    transition: background 0.2s !important;
+  .nav-links {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
-  .nav-cta:hover { background: var(--orange-dark) !important; }
+  .nav-links > li {
+    position: relative;
+    height: 106px;
+    display: flex;
+    align-items: center;
+    margin: 0;
+  }
+  .nav-links > li > a {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 20px;
+    color: #fff;
+    font-family: 'Barlow Semi Condensed', 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: 0;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  .nav-links > li > a:hover,
+  .nav-links > li > a.is-active,
+  .nav-links > li:hover > a,
+  .nav-links > li:focus-within > a {
+    color: #fe7f00;
+  }
 
-  section { padding: 96px var(--gutter); }
+  .nav-caret {
+    width: 8px;
+    height: 8px;
+    margin-top: -3px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    opacity: 0.65;
+  }
+  .nav-submenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 286px;
+    padding: 32px 0 25px;
+    margin: 0;
+    list-style: none;
+    text-align: left;
+    white-space: nowrap;
+    background: #122636;
+    box-shadow: 4px 4px 15px rgba(0,0,0,0.15);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+  }
+  .nav-links > li:hover .nav-submenu,
+  .nav-links > li:focus-within .nav-submenu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .nav-submenu li {
+    margin: 0;
+  }
+  .nav-submenu li + li {
+    margin-top: 10px;
+  }
+  .nav-submenu a {
+    display: block;
+    padding: 0 40px;
+    color: #fff;
+    font-family: 'Barlow Semi Condensed', 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 30px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  .nav-submenu a:hover {
+    color: #fe7f00;
+  }
+
+  .nav-panel-button {
+    flex: 0 0 60px;
+    width: 60px;
+    height: 60px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.18);
+    display: grid;
+    grid-template-columns: repeat(2, 9px);
+    place-content: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  .nav-panel-button:hover {
+    background: rgba(255,255,255,0.26);
+  }
+  .nav-panel-button span {
+    width: 9px;
+    height: 9px;
+    border-radius: 38%;
+    background: #fff;
+    display: block;
+  }
+
+  section { padding: 120px var(--gutter); }
   .shell {
     width: min(100%, var(--shell));
     margin: 0 auto;
@@ -285,12 +395,170 @@
   .hero-btns { display: flex; gap: 0.8rem; flex-wrap: wrap; }
   .hero-visual { position: relative; z-index: 2; width: min(100%, 780px); justify-self: end; margin-top: 1rem; }
 
+  /* CLIENTS */
+  .client-proof {
+    padding: 38px 0 56px;
+    position: relative;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0)),
+      var(--bg-secondary);
+    color: #f3f7fb;
+    overflow: hidden;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .client-proof::before,
+  .client-proof::after {
+    content: "";
+    position: absolute;
+    inset: auto;
+    pointer-events: none;
+  }
+  .client-proof::before {
+    display: none;
+  }
+  .client-proof::after {
+    display: none;
+  }
+  .client-proof-shell {
+    width: min(100%, 1360px);
+    margin: 0 auto;
+    padding: 0 clamp(18px, 3vw, 42px);
+    position: relative;
+    z-index: 1;
+  }
+  .client-proof-header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.5rem;
+    align-items: end;
+    margin-bottom: 1.55rem;
+  }
+  .client-proof-kicker {
+    display: block;
+    margin-bottom: 0.65rem;
+    color: #ff8f5b;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.84rem;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    opacity: 0.94;
+  }
+  .client-proof-title {
+    margin: 0;
+    color: #f6f8fc;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(2.45rem, 4.4vw, 4.05rem);
+    font-weight: 900;
+    line-height: 0.94;
+    text-transform: uppercase;
+    text-wrap: balance;
+    letter-spacing: -0.03em;
+  }
+  .client-proof-title span {
+    color: #ff7a42;
+  }
+  .client-proof-sub {
+    max-width: 42rem;
+    margin-top: 0.7rem;
+    color: rgba(212,222,235,0.82);
+    font-size: 0.98rem;
+    line-height: 1.65;
+  }
+  .client-proof-line {
+    height: 2px;
+    margin-bottom: 1.05rem;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(255,122,66,0.72), rgba(255,122,66,0.18), rgba(255,122,66,0));
+  }
+  .client-proof-stage {
+    position: relative;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    overflow: hidden;
+  }
+  .client-proof-stage::before {
+    display: none;
+  }
+  .client-proof-stage::after {
+    display: none;
+  }
+  .client-proof-viewport {
+    overflow: hidden;
+    position: relative;
+    border-radius: 26px;
+    background: #ffffff;
+    border: 1px solid rgba(255,255,255,0.9);
+    box-shadow: none;
+  }
+  .client-proof-viewport::before {
+    display: none;
+  }
+  .client-proof-track {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    will-change: transform;
+    animation: client-proof-marquee 28s linear infinite;
+  }
+  .client-proof-viewport:hover .client-proof-track,
+  .client-proof-viewport:focus-within .client-proof-track {
+    animation-play-state: paused;
+  }
+  .client-proof-slide,
+  .client-proof-grid {
+    display: contents;
+  }
+  .client-proof-logo {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex: 0 0 clamp(150px, 14vw, 190px);
+    min-height: 108px;
+    padding: 1rem 1.1rem;
+    background: transparent;
+    filter: saturate(1.02);
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+  .client-proof-logo::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 1px;
+    height: 52px;
+    transform: translateY(-50%);
+    background: linear-gradient(180deg, rgba(16,27,44,0), rgba(16,27,44,0.12), rgba(16,27,44,0));
+  }
+  .client-proof-track .client-proof-logo:nth-child(12n)::after {
+    display: none;
+  }
+  .client-proof-logo:hover {
+    transform: translateY(-2px);
+    opacity: 0.92;
+  }
+  .client-proof-logo img {
+    display: block;
+    width: min(100%, 172px);
+    max-height: 56px;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+  }
+  @keyframes client-proof-marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
   /* Mock screen */
   .mock-screen {
     background: var(--bg-card); border: 1px solid rgba(249,115,22,0.18);
     border-radius: 12px; overflow: hidden;
     box-shadow: 0 40px 100px rgba(0,0,0,0.7), 0 0 80px rgba(249,115,22,0.05);
-    aspect-ratio: 4/3; display: flex; flex-direction: column;
+    aspect-ratio: 3 / 2; display: flex; flex-direction: column;
     position: relative;
   }
   .mock-screen::after {
@@ -313,10 +581,14 @@
     min-height: 0;
     background: linear-gradient(180deg, #09111a 0%, #070d14 100%);
     padding: 0.65rem;
+    display: flex;
   }
   .mock-video-wrap {
     width: 100%;
     height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 8px;
     overflow: hidden;
     background: #050a10;
@@ -326,7 +598,8 @@
     width: 100%;
     height: 100%;
     display: block;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
     background: #050a10;
   }
 
@@ -670,6 +943,86 @@
     font-size: 0.95rem;
     color: var(--gray-mid);
     line-height: 1.55;
+  }
+
+  /* SUCCESS STORIES */
+  .success-stories {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0)),
+      var(--bg-secondary);
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .success-stories-shell {
+    width: min(100%, var(--shell));
+    margin: 0 auto;
+    display: grid;
+    gap: 1.8rem;
+  }
+  .success-stories-header {
+    display: block;
+  }
+  .success-stories-copy {
+    max-width: 840px;
+  }
+  .success-stories-copy h2 {
+    margin-bottom: 0.6rem;
+  }
+  .success-stories-copy h2 span {
+    color: var(--orange);
+  }
+  .success-stories-copy p {
+    max-width: 58ch;
+    color: var(--gray-light);
+    font-size: 0.96rem;
+    line-height: 1.6;
+  }
+  .success-stories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.2rem;
+  }
+  .story-card {
+    display: grid;
+    min-height: 100%;
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.08);
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0)),
+      var(--bg-card);
+    box-shadow: 0 24px 54px rgba(0,0,0,0.22);
+    transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
+  }
+  .story-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(249,115,22,0.22);
+    box-shadow: 0 28px 60px rgba(0,0,0,0.3);
+  }
+  .story-media {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #0a1017;
+  }
+  .story-media iframe {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border: 0;
+    background: #0a1017;
+  }
+  .story-content {
+    display: grid;
+    gap: 0.35rem;
+    padding: 0.95rem 1rem 1rem;
+  }
+  .story-title {
+    font-size: clamp(1rem, 1.15vw, 1.14rem);
+    line-height: 1.22;
+    color: var(--white);
+    letter-spacing: 0;
   }
 
   /* ROLES */
@@ -1614,6 +1967,261 @@
   .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
   .fade-in.visible { opacity: 1; transform: none; }
 
+  /* DEEP BLACK REFACTOR */
+  .db-header {
+    background: #a51217;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: none;
+  }
+  .db-header.is-hidden {
+    transform: translateY(-100%);
+  }
+  .db-header.is-scrolled {
+    background: #08111b;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .btn-primary {
+    background: var(--orange);
+    border: 1px solid var(--orange);
+    color: #000;
+    box-shadow: none;
+  }
+  .btn-primary:hover {
+    background: var(--orange-dark);
+    border-color: var(--orange-dark);
+    box-shadow: none;
+    transform: translateY(-1px);
+  }
+  .btn-secondary {
+    background: transparent;
+    border: 1px solid var(--border-mid);
+    color: var(--white);
+  }
+  .btn-secondary:hover {
+    border-color: rgba(255,255,255,0.18);
+    color: var(--white);
+    background: rgba(255,255,255,0.02);
+  }
+  .hero {
+    background:
+      radial-gradient(circle at 78% 42%, rgba(249,115,22,0.08), transparent 18%),
+      radial-gradient(circle at 18% 18%, rgba(255,255,255,0.035), transparent 16%),
+      linear-gradient(180deg, #a51217 0%, #8d0f13 42%, #5d090c 100%);
+  }
+  .hero::after {
+    background: linear-gradient(180deg, rgba(93,9,12,0) 0%, rgba(10,10,10,0.96) 100%);
+    height: 110px;
+  }
+  .hero-content::before {
+    display: none;
+  }
+  .hero-sub,
+  .platform-content p,
+  .success-stories-copy p,
+  .pain-copy > p,
+  .faq-answer p {
+    color: var(--gray-light);
+  }
+  .stats-band-inner,
+  .benefit-block.alt,
+  .role-card,
+  .story-card,
+  .integration-item,
+  .why-card,
+  .platform-carousel-shell,
+  .feature-row,
+  .sector-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    box-shadow: none;
+  }
+  .stats-band-inner {
+    border-radius: 18px;
+  }
+  .trust-stat strong,
+  .platform-content h2 span,
+  .roles-header h2 span,
+  .sectors-header h2 span,
+  .success-stories-copy h2 span,
+  .faq-header h2 span,
+  .cta-final h2 span {
+    color: var(--orange);
+  }
+  .trust-stat span,
+  .benefit-item-text span,
+  .role-card p,
+  .feature-row p,
+  .sector-card-label,
+  .site-footer-description,
+  .site-footer-contact,
+  .site-footer-meta p {
+    color: var(--gray-light);
+  }
+  .client-proof,
+  .pain,
+  .roles,
+  .why,
+  .success-stories,
+  .integrations-section {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0)),
+      var(--bg-secondary);
+  }
+  .client-proof-viewport {
+    background: #0a0a0a;
+    border: 1px solid var(--border-subtle);
+  }
+  .client-proof-logo img {
+    filter: grayscale(100%) brightness(0) invert(1);
+    opacity: 0.5;
+    mix-blend-mode: normal;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .client-proof-logo:hover img {
+    opacity: 1;
+  }
+  .mock-screen {
+    background: #0a0a0a;
+    border: 1px solid var(--border-subtle);
+    box-shadow: none;
+  }
+  .mock-bar,
+  .mock-video-wrap,
+  .platform-carousel,
+  .story-media,
+  .story-media iframe {
+    background: #050505;
+  }
+  .mock-bar {
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .platform-carousel-shell::before,
+  .platform-carousel-shell::after,
+  .mock-screen::after,
+  .cta-final-inner::before,
+  .cta-final-inner::after {
+    display: none;
+  }
+  .platform-carousel {
+    border: 1px solid var(--border-subtle);
+  }
+  .feature-row,
+  .role-card,
+  .why-card,
+  .sector-card,
+  .story-card,
+  .integration-item,
+  .benefit-block.alt {
+    border-radius: 20px;
+  }
+  .feature-row:hover,
+  .feature-row.active,
+  .role-card:hover,
+  .why-card:hover,
+  .story-card:hover,
+  .sector-card:hover {
+    background: var(--bg-card-hover);
+    box-shadow: none;
+    border-color: rgba(249,115,22,0.18);
+  }
+  .benefit-item:hover {
+    background: transparent;
+    transform: none;
+  }
+  .benefit-block.alt {
+    padding: clamp(2.1rem, 2.8vw, 2.8rem);
+  }
+  .pain-point:hover {
+    background: rgba(255,255,255,0.02);
+    box-shadow: none;
+  }
+  .platform-carousel-shell {
+    padding: 1rem;
+  }
+  .platform-caption-text {
+    color: var(--white);
+  }
+  .platform-dot {
+    background: rgba(255,255,255,0.18);
+  }
+  .sector-card img {
+    filter: grayscale(100%) opacity(0.6) brightness(0.72);
+  }
+  .sector-card:hover img {
+    filter: grayscale(0%) opacity(1) brightness(0.94);
+  }
+  .sector-card::after {
+    background: linear-gradient(180deg, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.62) 100%);
+  }
+  .success-stories-copy p {
+    max-width: 48ch;
+  }
+  .story-card {
+    border-radius: 18px;
+  }
+  .story-content {
+    padding: 0.85rem 0.95rem 0.95rem;
+  }
+  .story-title {
+    font-size: clamp(0.94rem, 1.05vw, 1.04rem);
+    color: #f5f5f5;
+  }
+  .integration-item {
+    background: #0a0a0a;
+  }
+  .cta-final {
+    background:
+      radial-gradient(circle at 50% 0%, rgba(249,115,22,0.05), transparent 28%),
+      #000000;
+  }
+  .cta-final p {
+    color: var(--gray-light);
+  }
+  .cta-form {
+    border-top: 1px solid rgba(249,115,22,0.35);
+  }
+  .cta-field input {
+    background: #0a0a0a;
+    border: 1px solid var(--border-mid);
+    color: var(--white);
+  }
+  .cta-field input::placeholder {
+    color: #7f7f7f;
+  }
+  footer {
+    background: linear-gradient(135deg, #ff7a00 0%, #ff8600 45%, #ff9200 100%);
+    border-top: none;
+  }
+  .site-footer-brand,
+  .site-footer-contact {
+    border-right: 1px solid rgba(255, 255, 255, 0.22);
+  }
+  .site-footer-services h3,
+  .site-footer-description,
+  .site-footer-contact,
+  .site-footer-contact p,
+  .site-footer-services li,
+  .site-footer-contact a,
+  .site-footer-services a,
+  .site-footer-meta a,
+  .site-footer-meta,
+  .site-footer-meta p,
+  .site-footer-wordmark,
+  .site-footer-mark {
+    color: var(--white);
+  }
+  .site-footer-socials a,
+  .claim-book {
+    border-color: rgba(255, 255, 255, 0.95);
+    background: transparent;
+  }
+  .cover,
+  .cover::before,
+  .cover-divider,
+  .cover-topline {
+    background: #000000;
+  }
+
   @media (max-width: 960px) {
     .cover-menu { gap: 1.1rem; }
     .cover-menu a { font-size: 0.84rem; }
@@ -1667,6 +2275,21 @@
     .hero { min-height: auto; }
     .hero-shell { grid-template-columns: 1fr; gap: 3rem; }
     .hero-visual { order: -1; }
+    .client-proof-header {
+      grid-template-columns: 1fr;
+      gap: 0.8rem;
+      align-items: start;
+    }
+    .client-proof-sub {
+      max-width: 34rem;
+      font-size: 0.94rem;
+    }
+    .client-proof-line {
+      margin-bottom: 0;
+    }
+    .client-proof-stage {
+      padding: 0;
+    }
     .stats-band { width: 100%; margin-bottom: 1.75rem; }
     .stats-band-inner { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .platform-grid { grid-template-columns: 1fr; gap: 3rem; }
@@ -1689,6 +2312,9 @@
     .benefits { grid-template-columns: 1fr; }
     .benefit-block { padding: 0; }
     .benefit-block.alt { border-top: none; }
+    .success-stories-header {
+      display: block;
+    }
     .integrations-header { flex-direction: column; align-items: flex-start; }
     .site-footer-grid { grid-template-columns: 1fr; }
     .site-footer-brand,
@@ -1698,10 +2324,49 @@
       border-right: none;
       border-bottom: 1px solid rgba(255, 255, 255, 0.22);
     }
-    nav .nav-links li:not(:last-child) { display: none; }
+    .db-header .nav-inner {
+      height: 72px;
+      padding: 0 18px;
+    }
+    .nav-logo img {
+      height: 30px;
+      max-width: 155px;
+      object-fit: contain;
+    }
+    .nav-links {
+      display: none;
+    }
+    .nav-panel-button {
+      flex-basis: 46px;
+      width: 46px;
+      height: 46px;
+      grid-template-columns: repeat(2, 7px);
+      gap: 5px;
+    }
+    .nav-panel-button span {
+      width: 7px;
+      height: 7px;
+    }
   }
 
   @media (max-width: 640px) {
+    .client-proof {
+      padding-top: 28px;
+    }
+    .client-proof-title {
+      font-size: clamp(2rem, 11vw, 3rem);
+    }
+    .client-proof-stage {
+      padding: 0;
+    }
+    .client-proof-logo {
+      flex-basis: 132px;
+      min-height: 82px;
+      padding: 0.8rem 0.7rem;
+    }
+    .client-proof-logo img {
+      max-height: 42px;
+    }
     .cover-nav {
       min-height: 72px;
       gap: 1rem;
@@ -1784,6 +2449,16 @@
     .platform-carousel-caption { flex-direction: column; align-items: flex-start; }
     .platform-content h2 { max-width: 11ch; font-size: clamp(2.4rem, 10vw, 3.2rem); }
     .feature-row { min-height: 0; padding: 1.05rem 1rem; }
+    .success-stories {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    .story-content {
+      padding: 1rem 0.95rem 1.1rem;
+    }
+    .story-title {
+      font-size: clamp(1.18rem, 7vw, 1.45rem);
+    }
     .roles-grid { grid-template-columns: 1fr; }
     .sectors-row { grid-template-columns: 1fr; grid-auto-rows: 190px; }
     .sector-card { min-height: 0; }
@@ -1806,15 +2481,35 @@
 
 <div class="topbar"></div>
 
-<nav>
+<nav class="db-header" aria-label="Navegación principal">
   <div class="nav-inner">
-    <a class="nav-logo" href="#">REVIZTO<span>.</span></a>
+    <a class="nav-logo" href="https://digitalbricks.com.pe/" aria-label="Digital Bricks">
+      <img src="https://digitalbricks.com.pe/wp-content/uploads/2024/08/Logo-Blanco-DB1.png" alt="Digital Bricks">
+    </a>
     <ul class="nav-links">
-      <li><a href="#plataforma">Plataforma</a></li>
-      <li><a href="#roles">Para quién</a></li>
-      <li><a href="#faq">FAQ</a></li>
-      <li><a href="#cta" class="nav-cta">Agenda una demo</a></li>
+      <li><a href="https://digitalbricks.com.pe/">Inicio</a></li>
+      <li><a href="https://digitalbricks.com.pe/nosotros/">Nosotros</a></li>
+      <li class="has-submenu">
+        <a href="https://digitalbricks.com.pe/servicios/">Servicios <span class="nav-caret" aria-hidden="true"></span></a>
+      </li>
+      <li class="has-submenu">
+        <a class="is-active" href="https://digitalbricks.com.pe/revizto/">Tecnologías <span class="nav-caret" aria-hidden="true"></span></a>
+        <ul class="nav-submenu" aria-label="Tecnologías">
+          <li><a href="https://digitalbricks.com.pe/revizto/">Revizto</a></li>
+          <li><a href="index.html">Bildin</a></li>
+        </ul>
+      </li>
+      <li><a href="https://digitalbricks.com.pe/eventos/">Eventos</a></li>
+      <li><a href="https://digitalbricks.com.pe/descargables/">Casos y Descargables</a></li>
+      <li><a href="https://digitalbricks.com.pe/db-news/">DB News</a></li>
+      <li><a href="https://digitalbricks.com.pe/contacto/">Contacto</a></li>
     </ul>
+    <button class="nav-panel-button" type="button" aria-label="Abrir panel">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </button>
   </div>
 </nav>
 
@@ -1869,6 +2564,52 @@
               playsinline
             ></video>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLIENTES -->
+<section class="client-proof" aria-labelledby="client-proof-title">
+  <div class="client-proof-shell">
+    <div class="client-proof-header fade-in">
+      <div>
+        <span class="client-proof-kicker">Clientes que confían</span>
+        <h2 class="client-proof-title" id="client-proof-title">Ellos usan <span>Revizto</span></h2>
+        <p class="client-proof-sub">Equipos de diseño, coordinación y construcción ya lo integran en su flujo diario para revisar, coordinar y resolver más rápido.</p>
+      </div>
+      <div class="client-proof-line" aria-hidden="true"></div>
+    </div>
+
+    <div class="client-proof-stage fade-in" style="transition-delay:0.12s">
+      <div class="client-proof-viewport" tabindex="0" aria-label="Clientes que usan Revizto">
+        <div class="client-proof-track">
+          <div class="client-proof-logo"><img src="https://bildin.com.pe/companies/conssolida-logo.webp" alt="Conssolida"></div>
+          <div class="client-proof-logo"><img src="https://bildin.com.pe/companies/digital-bricks-logo.webp" alt="Digital Bricks"></div>
+          <div class="client-proof-logo"><img src="https://bildin.com.pe/companies/grau-dvi-logo.webp" alt="Grau DVI"></div>
+          <div class="client-proof-logo"><img src="https://bildin.com.pe/companies/lider-logo.webp" alt="Lider"></div>
+          <div class="client-proof-logo"><img src="https://bildin.com.pe/companies/hergon-logo.webp" alt="Hergon"></div>
+          <div class="client-proof-logo"><img src="https://bildin.com.pe/companies/tmgi-logo.webp" alt="TMGI"></div>
+          <div class="client-proof-logo"><img src="https://bildin.com.pe/companies/galilea-logo.webp" alt="Galilea"></div>
+          <div class="client-proof-logo"><img src="https://bildin.com.pe/companies/grupo-flesan-logo.webp" alt="Grupo Flesan"></div>
+          <div class="client-proof-logo"><img src="https://bildin.com.pe/companies/los-portales-logo.webp" alt="Los Portales"></div>
+          <div class="client-proof-logo"><img src="https://bildin.com.pe/companies/inarco-logo.webp" alt="Inarco"></div>
+          <div class="client-proof-logo"><img src="https://bildin.com.pe/companies/llosa-edificaciones-logo.webp" alt="Llosa Edificaciones"></div>
+          <div class="client-proof-logo"><img src="https://bildin.com.pe/companies/overlay-logo.webp" alt="Overlay"></div>
+
+          <div class="client-proof-logo" aria-hidden="true"><img src="https://bildin.com.pe/companies/conssolida-logo.webp" alt=""></div>
+          <div class="client-proof-logo" aria-hidden="true"><img src="https://bildin.com.pe/companies/digital-bricks-logo.webp" alt=""></div>
+          <div class="client-proof-logo" aria-hidden="true"><img src="https://bildin.com.pe/companies/grau-dvi-logo.webp" alt=""></div>
+          <div class="client-proof-logo" aria-hidden="true"><img src="https://bildin.com.pe/companies/lider-logo.webp" alt=""></div>
+          <div class="client-proof-logo" aria-hidden="true"><img src="https://bildin.com.pe/companies/hergon-logo.webp" alt=""></div>
+          <div class="client-proof-logo" aria-hidden="true"><img src="https://bildin.com.pe/companies/tmgi-logo.webp" alt=""></div>
+          <div class="client-proof-logo" aria-hidden="true"><img src="https://bildin.com.pe/companies/galilea-logo.webp" alt=""></div>
+          <div class="client-proof-logo" aria-hidden="true"><img src="https://bildin.com.pe/companies/grupo-flesan-logo.webp" alt=""></div>
+          <div class="client-proof-logo" aria-hidden="true"><img src="https://bildin.com.pe/companies/los-portales-logo.webp" alt=""></div>
+          <div class="client-proof-logo" aria-hidden="true"><img src="https://bildin.com.pe/companies/inarco-logo.webp" alt=""></div>
+          <div class="client-proof-logo" aria-hidden="true"><img src="https://bildin.com.pe/companies/llosa-edificaciones-logo.webp" alt=""></div>
+          <div class="client-proof-logo" aria-hidden="true"><img src="https://bildin.com.pe/companies/overlay-logo.webp" alt=""></div>
         </div>
       </div>
     </div>
@@ -2062,6 +2803,93 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUCCESS STORIES -->
+<section class="success-stories" aria-labelledby="success-stories-title">
+  <div class="success-stories-shell">
+    <div class="success-stories-header fade-in">
+      <div class="success-stories-copy">
+        <div class="eyebrow">Casos de exito</div>
+        <h2 id="success-stories-title">Resultados en <span>proyectos reales</span></h2>
+        <p>Cinco ejemplos concretos de como distintos equipos aplican Revizto para coordinar mejor, ganar control y mejorar la trazabilidad.</p>
+      </div>
+    </div>
+
+    <div class="success-stories-grid">
+      <article class="story-card fade-in">
+        <div class="story-media">
+          <iframe src="https://www.youtube-nocookie.com/embed/JZGjzKpoPLE?rel=0" title="Como un consorcio impulsa la transformacion digital en proyectos hospitalarios en Peru" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+        <div class="story-content">
+          <h3 class="story-title">Transformacion digital en proyectos hospitalarios en Peru</h3>
+        </div>
+      </article>
+
+      <article class="story-card fade-in" style="transition-delay:0.1s">
+        <div class="story-media">
+          <iframe src="https://www.youtube-nocookie.com/embed/IdSryzTJgPg?rel=0" title="Como un propietario mejora la comunicacion adquiere control y ahorra en la construccion" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+        <div class="story-content">
+          <h3 class="story-title">Mas comunicacion, mas control y ahorro en construccion</h3>
+        </div>
+      </article>
+
+      <article class="story-card fade-in" style="transition-delay:0.16s">
+        <div class="story-media">
+          <iframe src="https://www.youtube-nocookie.com/embed/Do-I33ZjSHw?rel=0" title="Centralizando la trazabilidad de proyectos desde el diseno hasta la construccion" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+        <div class="story-content">
+          <h3 class="story-title">Trazabilidad desde el diseno hasta la construccion</h3>
+        </div>
+      </article>
+
+      <article class="story-card fade-in" style="transition-delay:0.22s">
+        <div class="story-media">
+          <iframe src="https://www.youtube-nocookie.com/embed/Mc7BBTjwVXE?rel=0" title="Como la interoperabilidad impulsa la eficiencia en proyectos BIM" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+        <div class="story-content">
+          <h3 class="story-title">Como la interoperabilidad impulsa la eficiencia BIM</h3>
+        </div>
+      </article>
+
+      <article class="story-card fade-in" style="transition-delay:0.28s">
+        <div class="story-media">
+          <iframe src="https://www.youtube-nocookie.com/embed/bCBxroicZAc?rel=0" title="Como Revizto democratiza la informacion en construccion" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+        <div class="story-content">
+          <h3 class="story-title">Como Revizto democratiza la informacion en construccion</h3>
+        </div>
+      </article>
+
+      <article class="story-card fade-in" style="transition-delay:0.34s">
+        <div class="story-media">
+          <iframe src="https://www.youtube-nocookie.com/embed/J1xaYm9yYXc?rel=0" title="Revizto Testimonial Transforming Design and Construction Bridging the 2D and 3D Gap" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+        <div class="story-content">
+          <h3 class="story-title">Transforming Design and Construction: Bridging the 2D and 3D Gap</h3>
+        </div>
+      </article>
+
+      <article class="story-card fade-in" style="transition-delay:0.4s">
+        <div class="story-media">
+          <iframe src="https://www.youtube-nocookie.com/embed/WV9yPgnTeV4?rel=0" title="Revizto Testimonial Boosting Team Efficiency and Field Collaboration" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+        <div class="story-content">
+          <h3 class="story-title">Boosting Team Efficiency and Field Collaboration</h3>
+        </div>
+      </article>
+
+      <article class="story-card fade-in" style="transition-delay:0.46s">
+        <div class="story-media">
+          <iframe src="https://www.youtube-nocookie.com/embed/7zJMofstFR8?rel=0" title="Revizto Testimonial The Key to Easy Collaboration and Increased Model Engagement at SOM" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+        <div class="story-content">
+          <h3 class="story-title">The Key to Easy Collaboration and Increased Model Engagement at SOM</h3>
+        </div>
+      </article>
     </div>
   </div>
 </section>
@@ -2469,6 +3297,32 @@ WHY
       syncPlatformCarousel(nextIndex);
     }, 3200);
   }
+
+  const header = document.querySelector('.db-header');
+  let lastScrollY = window.scrollY;
+
+  const syncHeaderOnScroll = () => {
+    if (!header) return;
+
+    const currentScrollY = window.scrollY;
+    const nearTop = currentScrollY < 24;
+    const scrollingDown = currentScrollY > lastScrollY + 6;
+    const scrollingUp = currentScrollY < lastScrollY - 6;
+
+    if (nearTop) {
+      header.classList.remove('is-hidden', 'is-scrolled');
+    } else if (scrollingDown) {
+      header.classList.add('is-hidden', 'is-scrolled');
+    } else if (scrollingUp) {
+      header.classList.remove('is-hidden');
+      header.classList.add('is-scrolled');
+    }
+
+    lastScrollY = currentScrollY;
+  };
+
+  window.addEventListener('scroll', syncHeaderOnScroll, { passive: true });
+  syncHeaderOnScroll();
 
   document.querySelectorAll('.faq-question').forEach(btn => {
     btn.addEventListener('click', () => {
